@@ -1,0 +1,14 @@
+steps:
+  - name: 'golang:1.15.13-alpine'
+    args: ['go', 'vet', '-v', './...']
+
+  - name: 'golang:1.15.13-alpine'
+    args: ['go', 'test', '-v', './...']
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args: ['app', 'deploy', '--quiet']
+
+options:
+  env:
+    - 'CGO_ENABLED=0'
