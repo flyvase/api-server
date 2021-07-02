@@ -1,1 +1,4 @@
 runtime: go115
+
+env_variables:
+  MODE: release

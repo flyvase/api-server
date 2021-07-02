@@ -5,9 +5,19 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	"cloud.google.com/go/profiler"
 )
 
 func main() {
+	if os.Getenv("MODE") == "release" {
+		if err := profiler.Start(profiler.Config{
+			NoCPUProfiling: true,
+		}); err != nil {
+			panic("Failed to start the profiler")
+		}
+	}
+
 	http.HandleFunc("/", indexHandler)
 
 	port := os.Getenv("PORT")
