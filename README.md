@@ -35,9 +35,3 @@ go mod download
 # inside the docker container
 go run main.go
 ```
-
-- run static analysis
-
-```
-staticcheck ./...
-```
