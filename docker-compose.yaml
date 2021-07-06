@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    ports:
+      - 8080:8080
+    volumes:
+      - .:/app
+    command: /bin/ash -c "./scripts/wait_mysql.sh"
+    stdin_open: true
+    tty: true
+  mysql:
+    environment:
+      MYSQL_ROOT_PASSWORD: '&2dwn*8VSBj7WTU_'
+    image: mysql:8
+    ports:
+      - 3306:3306
