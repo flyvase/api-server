@@ -22,7 +22,6 @@ func main() {
 	}
 
 	handlers.RegisterIndex()
-	handlers.RegisterApi()
 
 	mux := http.DefaultServeMux
 	handler := cors.New(cors.Options{
