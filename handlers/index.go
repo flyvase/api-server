@@ -8,8 +8,8 @@ import (
 	"harvest/controllers"
 )
 
-type Greeting struct {
-	Result string `json:"result"`
+type indexResult struct {
+	result string
 }
 
 func RegisterIndex() {
@@ -26,7 +26,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 
 	name := r.URL.Query().Get("name")
 	greeting := controllers.Greeting(name)
-	b, err := json.Marshal(Greeting{Result: greeting})
+	b, err := json.Marshal(indexResult{result: greeting})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}

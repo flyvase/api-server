@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -24,8 +25,10 @@ func TestIndexHandler(t *testing.T) {
 		)
 	}
 
-	expected := "Hello test"
-	if rr.Body.String() != expected {
+	expected := indexResult{result: "Hello test"}
+	buf, _ := json.Marshal(expected)
+
+	if rr.Body.String() != string(buf) {
 		t.Errorf(
 			"Unexpected body: get (%v) want (%v)",
 			rr.Body.String(),
