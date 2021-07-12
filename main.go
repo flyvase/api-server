@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -31,10 +31,9 @@ func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
-		log.Printf("Defaulting port to %s", port)
 	}
 
-	log.Printf("Listening on port %s", port)
+	fmt.Printf("Listening on port %s", port)
 	if err := http.ListenAndServe(":"+port, handler); err != nil {
 		panic(err)
 	}
