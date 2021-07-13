@@ -3,6 +3,14 @@ steps:
     args: ['go', 'test', '-v', './...']
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: '/bin/bash'
+    args:
+      [
+        '-c',
+        'gcloud secrets versions access latest --secret=harvest-secrets > secrets.yaml',
+      ]
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'gcloud'
     args: ['app', 'deploy', '--quiet']
 
