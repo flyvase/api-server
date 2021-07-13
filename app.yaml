@@ -1,4 +1,7 @@
 runtime: go115
 
+includes:
+  - secrets.yaml
+
 env_variables:
   MODE: release

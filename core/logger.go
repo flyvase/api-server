@@ -35,7 +35,7 @@ const (
 func GetTraceId(header string) string {
 	parts := strings.Split(header, "/")
 	if len(parts) > 0 && len(parts[0]) > 0 {
-		return fmt.Sprintf("projects/%s/traces/%s", "flyvase-stg", parts[0])
+		return fmt.Sprintf("projects/%s/traces/%s", ProjectId, parts[0])
 	}
 	return ""
 }
