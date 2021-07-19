@@ -26,7 +26,7 @@ func main() {
 
 	mux := http.DefaultServeMux
 	handler := cors.New(cors.Options{
-		AllowedOrigins: []string{"http://localhost:3000"},
+		AllowedOrigins: []string{config.AllowedOrigin()},
 	}).Handler(mux)
 
 	port := os.Getenv("PORT")
