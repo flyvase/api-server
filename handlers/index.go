@@ -5,12 +5,12 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"harvest/controllers"
 	"harvest/logger"
+	"harvest/repositories"
 )
 
-type indexResult struct {
-	result string
+type IndexResponseBody struct {
+	Message string `json:"message"`
 }
 
 func RegisterIndex() {
@@ -18,21 +18,31 @@ func RegisterIndex() {
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
+	const component = "indexHandler"
 	trace := GetTraceId(r.Header.Get("X-Cloud-Trace-Context"))
 	ctx := context.WithValue(context.Background(), "trace", trace)
-
-	logger.Debug("Default log", "indexHandler")
 
 	if r.URL.Path != "/" {
 		http.NotFound(w, r)
 		return
 	}
 
-	name := r.URL.Query().Get("name")
-	greeting := controllers.Greeting(name)
-	b, err := json.Marshal(indexResult{result: greeting})
+	db, err1 := repositories.InitMySqlConnection()
+	if err1 != nil {
+		logger.Error(ctx, err1.Error(), component)
+		http.Error(w, err1.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if err := db.Ping(); err != nil {
+		logger.Error(ctx, err.Error(), component)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	b, err := json.Marshal(IndexResponseBody{Message: "Database connection confirmed"})
 	if err != nil {
-		logger.Error(ctx, "Failed to marshal response object", "indexHandler")
+		logger.Error(ctx, err.Error(), component)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
