@@ -8,3 +8,9 @@
 *.dylib
 *.test
 *.out
+mysql
+scripts
+cloudbuild.*.yaml
+docker-compose.yaml
+Dockerfile
+README.md

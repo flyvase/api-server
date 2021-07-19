@@ -7,6 +7,7 @@ import (
 
 	"github.com/rs/cors"
 
+	"harvest/config"
 	"harvest/controllers"
 	"harvest/entities"
 	"harvest/handlers"
@@ -14,7 +15,7 @@ import (
 )
 
 func main() {
-	if os.Getenv("MODE") == "release" {
+	if config.Mode == "release" {
 		cpr := repositories.CloudProfiler{}
 		if err := controllers.StartProfiler(cpr, entities.ProfilerConfig{NoCPUProfiling: true}); err != nil {
 			panic("Failed to start profiling")
