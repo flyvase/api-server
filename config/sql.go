@@ -12,4 +12,10 @@ var (
 	dbName                   = os.Getenv("DB_NAME")
 )
 
-var DbUri = fmt.Sprintf("%s:%s@unix(/cloudsql/%s)/%s", dbUser, dbPwd, dbInstanceConnectionName, dbName)
+func GetDbUri() string {
+	if Mode == "release" {
+		return fmt.Sprintf("%s:%s@unix(/cloudsql/%s)/%s", dbUser, dbPwd, dbInstanceConnectionName, dbName)
+	} else {
+		return fmt.Sprintf("%s:%s@tcp(%s)/%s", dbUser, dbPwd, dbInstanceConnectionName, dbName)
+	}
+}
