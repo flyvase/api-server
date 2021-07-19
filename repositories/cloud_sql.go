@@ -10,7 +10,7 @@ import (
 )
 
 func InitMySqlConnection() (*sql.DB, error) {
-	dbPool, err := sql.Open("mysql", config.DbUri)
+	dbPool, err := sql.Open("mysql", config.GetDbUri())
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
