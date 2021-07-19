@@ -13,6 +13,13 @@ services:
   mysql:
     environment:
       MYSQL_ROOT_PASSWORD: '&2dwn*8VSBj7WTU_'
+      DB_USER: harvest
+      DB_PASS: FM5fX|jt(gdv-N%L
+      DB_INSTANCE_CONNECTION_NAME: harvest_mysql_1:3306
+      DB_NAME: mr_president
     image: mysql:8
+    volumes:
+      - ./scripts/db:/docker-entrypoint-initdb.d
+      - ./mysql/data:/var/lib/mysql
     ports:
       - 3306:3306
