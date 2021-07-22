@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"fmt"
+	"context"
 	"net/http"
 
 	"github.com/rs/cors"
@@ -12,7 +12,13 @@ import (
 
 func usersHandler(w http.ResponseWriter, r *http.Request) {
 	const component = "usersHandler"
-	logger.Debug(fmt.Sprintf("url: %v, method: %v", r.URL, r.Method), component)
+	trace := getTraceId(r)
+	ctx := context.WithValue(context.Background(), "trace", trace)
+
+	validatePath("/users/", w, r)
+	validateMethods([]string{http.MethodPost}, w, r)
+
+	logger.Info(ctx, "good", component)
 }
 
 func UsersHandler() http.Handler {
@@ -20,6 +26,6 @@ func UsersHandler() http.Handler {
 
 	return cors.New(cors.Options{
 		AllowedOrigins: []string{config.AllowedOrigin()},
-		AllowedMethods: []string{"POST"},
+		AllowedMethods: []string{http.MethodPost},
 	}).Handler(handler)
 }
