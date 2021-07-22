@@ -17,6 +17,7 @@ func usersHandler(w http.ResponseWriter, r *http.Request) {
 
 	validatePath("/users/", w, r)
 	validateMethods([]string{http.MethodPost}, w, r)
+	validateContentType(jsonContentType, w, r)
 
 	logger.Info(ctx, "good", component)
 }
