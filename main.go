@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/rs/cors"
-
 	"harvest/config"
 	"harvest/controllers"
 	"harvest/entities"
@@ -22,12 +20,8 @@ func main() {
 		}
 	}
 
-	handlers.RegisterIndex()
-
-	mux := http.DefaultServeMux
-	handler := cors.New(cors.Options{
-		AllowedOrigins: []string{config.AllowedOrigin()},
-	}).Handler(mux)
+	mux := http.NewServeMux()
+	mux.Handle("/users/", handlers.UsersHandler())
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -35,7 +29,7 @@ func main() {
 	}
 
 	fmt.Printf("Listening on port %s\n", port)
-	if err := http.ListenAndServe(":"+port, handler); err != nil {
+	if err := http.ListenAndServe(":"+port, mux); err != nil {
 		panic(err)
 	}
 }
