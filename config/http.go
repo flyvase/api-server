@@ -1,11 +1,11 @@
 package config
 
 func AllowedOrigin() string {
-	if Environment == "dev" {
-		return "http://localhost:3000"
-	} else if Environment == "stg" {
+	if Environment == "stg" {
 		return "https://retail-dot-flyvase-stg.an.r.appspot.com"
-	} else {
+	} else if Environment == "prod" {
 		return "https://flyvase.net"
+	} else {
+		return "http://localhost:3000"
 	}
 }
