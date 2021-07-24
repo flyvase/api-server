@@ -3,14 +3,9 @@ package logger
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"harvest/config"
-)
-
-const (
-	debug = "DEBUG"
-	info  = "INFO"
-	err   = "ERROR"
 )
 
 func Debug(message, component string) {
@@ -19,7 +14,7 @@ func Debug(message, component string) {
 	}
 	e := LogEntry{
 		Message:   message,
-		Severity:  debug,
+		Severity:  "DEBUG",
 		Component: component,
 	}
 
@@ -29,7 +24,7 @@ func Debug(message, component string) {
 func Info(ctx context.Context, message, component string) {
 	e := LogEntry{
 		Message:   message,
-		Severity:  info,
+		Severity:  "INFO",
 		Component: component,
 		Trace:     ctx.Value("trace").(string),
 	}
@@ -37,13 +32,14 @@ func Info(ctx context.Context, message, component string) {
 	fmt.Println(e)
 }
 
-func Error(ctx context.Context, message, component string) {
+func Error(ctx context.Context, component string, err error) {
+	msg := fmt.Sprintf("%+v", err)
 	e := LogEntry{
-		Message:   message,
-		Severity:  err,
+		Message:   msg,
+		Severity:  "ERROR",
 		Component: component,
 		Trace:     ctx.Value("trace").(string),
 	}
 
-	fmt.Println(e)
+	log.Println(e)
 }

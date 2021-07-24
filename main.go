@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"os"
 
@@ -12,6 +13,8 @@ import (
 )
 
 func main() {
+	log.SetFlags(0)
+
 	if config.Mode == "release" {
 		cpr := repositories.CloudProfiler{}
 		if err := controllers.StartProfiler(cpr, entities.ProfilerConfig{NoCPUProfiling: true}); err != nil {
