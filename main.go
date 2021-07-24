@@ -1,13 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 
+	"cloud.google.com/go/profiler"
+	"github.com/pkg/errors"
+
 	"harvest/config"
-	"harvest/controllers"
-	"harvest/entities"
 	"harvest/handlers"
 	"harvest/repositories"
 )
@@ -16,9 +18,9 @@ func main() {
 	log.SetFlags(0)
 
 	if config.Mode == "release" {
-		cpr := repositories.CloudProfiler{}
-		if err := controllers.StartProfiler(cpr, entities.ProfilerConfig{NoCPUProfiling: true}); err != nil {
-			panic("Failed to start profiling")
+		if err := profiler.Start(profiler.Config{NoCPUProfiling: true}); err != nil {
+			msg := fmt.Sprintf("Failed to start profiler\n%+v", errors.WithStack(err))
+			panic(msg)
 		}
 	}
 
