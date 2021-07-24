@@ -42,7 +42,7 @@ func usersHandler(w http.ResponseWriter, r *http.Request, i interfaces.User) {
 	}
 
 	if err := controllers.CreateUser(i, u); err != nil {
-		logger.Error(ctx, component, err)
+		logger.Error(ctx, component, errors.WithStack(err))
 		switch err.(type) {
 		case core.DSConnErr:
 			http.Error(w, "Data source unavailable", http.StatusInternalServerError)
