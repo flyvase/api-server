@@ -1,4 +1,6 @@
 -- Only for local development env
+use mr_president;
+
 create table users (
   id int unsigned primary key auto_increment,
   firebase_uid varchar(255) not null unique,
