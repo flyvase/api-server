@@ -1,11 +1,9 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"os"
-
-	"github.com/rs/cors"
 
 	"harvest/config"
 	"harvest/controllers"
@@ -15,6 +13,8 @@ import (
 )
 
 func main() {
+	log.SetFlags(0)
+
 	if config.Mode == "release" {
 		cpr := repositories.CloudProfiler{}
 		if err := controllers.StartProfiler(cpr, entities.ProfilerConfig{NoCPUProfiling: true}); err != nil {
@@ -22,20 +22,22 @@ func main() {
 		}
 	}
 
-	handlers.RegisterIndex()
+	db, err1 := repositories.InitMySqlConnection()
+	if err1 != nil {
+		panic(err1)
+	}
 
-	mux := http.DefaultServeMux
-	handler := cors.New(cors.Options{
-		AllowedOrigins: []string{config.AllowedOrigin()},
-	}).Handler(mux)
+	ur := repositories.User{db}
+
+	mux := http.NewServeMux()
+	mux.Handle("/users/", handlers.UsersHandler(ur))
 
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 
-	fmt.Printf("Listening on port %s\n", port)
-	if err := http.ListenAndServe(":"+port, handler); err != nil {
-		panic(err)
+	if err2 := http.ListenAndServe(":"+port, mux); err2 != nil {
+		panic(err2)
 	}
 }

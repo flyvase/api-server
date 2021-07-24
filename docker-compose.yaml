@@ -8,6 +8,7 @@ services:
       DB_PASS: FM5fX|jt(gdv-N%L
       DB_INSTANCE_CONNECTION_NAME: harvest_mysql_1:3306
       DB_NAME: mr_president
+      ENVIRONMENT: dev
     ports:
       - 8080:8080
     volumes:
