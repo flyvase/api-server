@@ -22,15 +22,22 @@ func main() {
 		}
 	}
 
+	db, err1 := repositories.InitMySqlConnection()
+	if err1 != nil {
+		panic(err1)
+	}
+
+	ur := repositories.User{db}
+
 	mux := http.NewServeMux()
-	mux.Handle("/users/", handlers.UsersHandler())
+	mux.Handle("/users/", handlers.UsersHandler(ur))
 
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 
-	if err := http.ListenAndServe(":"+port, mux); err != nil {
-		panic(err)
+	if err2 := http.ListenAndServe(":"+port, mux); err2 != nil {
+		panic(err2)
 	}
 }
