@@ -5,8 +5,9 @@ import (
 	"net/http"
 	"os"
 
-	"harvest/handlers"
+	"harvest/interfaces"
 	"harvest/repositories"
+	"harvest/web"
 )
 
 func main() {
@@ -17,10 +18,12 @@ func main() {
 		panic(err1)
 	}
 
-	ur := repositories.User{db}
+	provider := interfaces.RepositoriesProvider{
+		User: repositories.User{DB: db},
+	}
 
 	mux := http.NewServeMux()
-	mux.Handle("/users/", handlers.UsersHandler(ur))
+	mux.Handle("/users/", web.UsersHandler(&provider))
 
 	port := os.Getenv("PORT")
 	if port == "" {
