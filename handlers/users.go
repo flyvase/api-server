@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/go-playground/validator"
-	"github.com/pkg/errors"
 	"github.com/rs/cors"
 
 	"harvest/config"
@@ -29,20 +28,20 @@ func usersHandler(w http.ResponseWriter, r *http.Request, i interfaces.User) {
 	var u entities.User
 	dec := json.NewDecoder(r.Body)
 	if err := dec.Decode(&u); err != nil {
-		logger.Error(ctx, component, errors.WithStack(err))
+		logger.Error(ctx, component, err)
 		http.Error(w, "Bad Request", http.StatusBadRequest)
 		return
 	}
 
 	v := validator.New()
 	if err := v.Struct(u); err != nil {
-		logger.Error(ctx, component, errors.WithStack(err))
+		logger.Error(ctx, component, err)
 		http.Error(w, "Bad Request", http.StatusBadRequest)
 		return
 	}
 
 	if err := controllers.CreateUser(i, u); err != nil {
-		logger.Error(ctx, component, errors.WithStack(err))
+		logger.Error(ctx, component, err)
 		switch err.(type) {
 		case core.DSConnErr:
 			http.Error(w, "Data source unavailable", http.StatusInternalServerError)

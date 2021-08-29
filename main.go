@@ -7,7 +7,6 @@ import (
 	"os"
 
 	"cloud.google.com/go/profiler"
-	"github.com/pkg/errors"
 
 	"harvest/config"
 	"harvest/handlers"
@@ -19,7 +18,7 @@ func main() {
 
 	if config.Mode == "release" {
 		if err := profiler.Start(profiler.Config{NoCPUProfiling: true}); err != nil {
-			msg := fmt.Sprintf("Failed to start profiler\n%+v", errors.WithStack(err))
+			msg := fmt.Sprintf("Failed to start profiler\n%+v", err)
 			panic(msg)
 		}
 	}
