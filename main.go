@@ -1,27 +1,16 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
 
-	"cloud.google.com/go/profiler"
-
-	"harvest/config"
 	"harvest/handlers"
 	"harvest/repositories"
 )
 
 func main() {
 	log.SetFlags(0)
-
-	if config.Mode == "release" {
-		if err := profiler.Start(profiler.Config{NoCPUProfiling: true}); err != nil {
-			msg := fmt.Sprintf("Failed to start profiler\n%+v", err)
-			panic(msg)
-		}
-	}
 
 	db, err1 := repositories.InitMySqlConnection()
 	if err1 != nil {
