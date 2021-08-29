@@ -8,11 +8,11 @@ import (
 )
 
 type User struct {
-	*sql.DB
+	DB *sql.DB
 }
 
 func (r User) Create(u entities.User) error {
-	_, err := r.Exec(
+	_, err := r.DB.Exec(
 		`insert into users (
 			firebase_uid, first_name, last_name
 		) values (?, ?, ?)`,
