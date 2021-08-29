@@ -1,7 +1,6 @@
 package logger
 
 import (
-	"context"
 	"fmt"
 	"log"
 
@@ -21,24 +20,25 @@ func Debug(message, component string) {
 	fmt.Println(e)
 }
 
-func Info(ctx context.Context, message, component string) {
+func Info(message, component string, trace string) {
 	e := LogEntry{
 		Message:   message,
 		Severity:  "INFO",
 		Component: component,
-		Trace:     ctx.Value("trace").(string),
+		Trace:     trace,
 	}
 
 	fmt.Println(e)
 }
 
-func Error(ctx context.Context, component string, err error) {
+func Error(
+	component string, err error, trace string) {
 	msg := fmt.Sprintf("%+v", err)
 	e := LogEntry{
 		Message:   msg,
 		Severity:  "ERROR",
 		Component: component,
-		Trace:     ctx.Value("trace").(string),
+		Trace:     trace,
 	}
 
 	log.Println(e)
