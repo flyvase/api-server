@@ -5,8 +5,6 @@ import (
 
 	"harvest/core"
 	"harvest/entities"
-
-	"github.com/pkg/errors"
 )
 
 type User struct {
@@ -23,9 +21,9 @@ func (r User) Create(u entities.User) error {
 	if err != nil {
 		switch err {
 		case sql.ErrConnDone:
-			return errors.WithStack(core.DSConnErr{Original: err})
+			return core.DSConnErr{Original: err}
 		default:
-			return errors.WithStack(core.UnknownErr{Original: err})
+			return core.UnknownErr{Original: err}
 		}
 	}
 
