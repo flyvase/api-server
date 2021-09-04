@@ -12,9 +12,9 @@ import (
 
 const uhComponent = "UserHandler"
 
-func userHandler(repo repository.User) http.Handler {
+func userHandler(usr repository.User) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		trace := getTraceId(r)
+		trace := request.GetTraceId(r)
 
 		var ur request.User
 		if err := request.DecodeUserRequestJson(r.Body, &ur); err != nil {
@@ -25,7 +25,7 @@ func userHandler(repo repository.User) http.Handler {
 
 		ue := ur.ToUserEntity()
 
-		if err := controller.CreateUser(ue, repo); err != nil {
+		if err := controller.CreateUser(ue, usr); err != nil {
 			logger.Error(uhComponent, err, trace)
 			switch err.(type) {
 			case exception.SqlConnClosedError:
@@ -40,11 +40,11 @@ func userHandler(repo repository.User) http.Handler {
 	})
 }
 
-func UserHandler(repo repository.User) http.Handler {
+func UserHandler(usr repository.User, aur repository.Auth) http.Handler {
 	opt := Option{
 		Path:        "/user/",
 		Methods:     &[]string{http.MethodPost},
 		ContentType: jsonContentType,
 	}
-	return buildHandlerWithDefaultMiddlewares(&opt, userHandler(repo))
+	return buildHandlerWithDefaultMiddlewares(&opt, userHandler(usr), aur)
 }
