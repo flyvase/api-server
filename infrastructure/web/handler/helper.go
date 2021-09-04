@@ -1,11 +1,9 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
-	"strings"
 
-	"harvest/config"
+	"harvest/domain/repository"
 	"harvest/infrastructure/web/middleware"
 )
 
@@ -17,24 +15,19 @@ type Option struct {
 	ContentType string
 }
 
-func getTraceId(r *http.Request) string {
-	parts := strings.Split(r.Header.Get("X-Cloud-Trace-Context"), "/")
-	if len(parts) > 0 && len(parts[0]) > 0 {
-		return fmt.Sprintf("projects/%s/traces/%s", config.ProjectId, parts[0])
-	}
-	return ""
-}
-
-func buildHandlerWithDefaultMiddlewares(opt *Option, next http.Handler) http.Handler {
+func buildHandlerWithDefaultMiddlewares(opt *Option, next http.Handler, aur repository.Auth) http.Handler {
 	return middleware.Logger(
-		middleware.PathValidator(
-			middleware.MethodValidator(
-				middleware.ContentTypeValidator(
-					next, opt.ContentType,
+		middleware.Auth(
+			middleware.PathValidator(
+				middleware.MethodValidator(
+					middleware.ContentTypeValidator(
+						next, opt.ContentType,
+					),
+					*opt.Methods,
 				),
-				*opt.Methods,
+				opt.Path,
 			),
-			opt.Path,
+			aur,
 		),
 	)
 }

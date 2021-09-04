@@ -9,7 +9,7 @@ type UserImpl struct {
 	Sql repository.Sql
 }
 
-func (u UserImpl) Create(user entity.User) (int64, error) {
+func (u *UserImpl) Create(user entity.User) (int64, error) {
 	res, err := u.Sql.Exec(
 		`insert into users (
 			firebase_uid, first_name, last_name

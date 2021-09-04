@@ -1,0 +1,21 @@
+package request
+
+import (
+	"fmt"
+	"net/http"
+	"strings"
+
+	"harvest/config"
+)
+
+func GetTraceId(r *http.Request) string {
+	parts := strings.Split(r.Header.Get("X-Cloud-Trace-Context"), "/")
+	if len(parts) > 0 && len(parts[0]) > 0 {
+		return fmt.Sprintf("projects/%s/traces/%s", config.ProjectId, parts[0])
+	}
+	return ""
+}
+
+func GetAuthToken(r *http.Request) string {
+	return strings.Fields(r.Header.Get("Authorization"))[1]
+}
