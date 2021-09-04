@@ -5,32 +5,35 @@ import (
 	"net/http"
 	"os"
 
-	"harvest/interfaces"
-	"harvest/repositories"
-	"harvest/web"
+	"github.com/rs/cors"
+
+	"harvest/config"
+	"harvest/core/logger"
+	"harvest/infrastructure/repository"
+	"harvest/infrastructure/web/handler"
 )
 
 func main() {
 	log.SetFlags(0)
+	logger.Debug("Starting web server", "main")
 
-	db, err1 := repositories.InitMySqlConnection()
-	if err1 != nil {
-		panic(err1)
-	}
-
-	provider := interfaces.RepositoriesProvider{
-		User: repositories.User{DB: db},
-	}
+	sqlRepo := repository.NewSqlRepositoryImpl()
+	userRepo := repository.UserImpl{Sql: sqlRepo}
 
 	mux := http.NewServeMux()
-	mux.Handle("/users/", web.UsersHandler(&provider))
+	mux.Handle("/user/", handler.UserHandler(userRepo))
+
+	cors.New(cors.Options{
+		AllowedOrigins: config.AllowedOrigin(),
+		AllowedMethods: []string{http.MethodPost},
+	}).Handler(mux)
 
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 
-	if err2 := http.ListenAndServe(":"+port, mux); err2 != nil {
-		panic(err2)
+	if err := http.ListenAndServe(":"+port, mux); err != nil {
+		panic(err)
 	}
 }

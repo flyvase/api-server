@@ -9,6 +9,7 @@ services:
       DB_INSTANCE_CONNECTION_NAME: harvest_mysql_1:3306
       DB_NAME: mr_president
       ENVIRONMENT: dev
+      MODE: debug
     ports:
       - 8080:8080
     volumes:
@@ -21,7 +22,7 @@ services:
       MYSQL_ROOT_PASSWORD: '&2dwn*8VSBj7WTU_'
     image: mysql:8
     volumes:
-      - ./scripts/db:/docker-entrypoint-initdb.d
+      - ./scripts/sql:/docker-entrypoint-initdb.d
       - ./mysql/data:/var/lib/mysql
     ports:
       - 3306:3306

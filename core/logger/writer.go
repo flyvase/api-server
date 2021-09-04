@@ -33,9 +33,8 @@ func Info(message, component string, trace string) {
 
 func Error(
 	component string, err error, trace string) {
-	msg := fmt.Sprintf("%+v", err)
 	e := LogEntry{
-		Message:   msg,
+		Message:   err.Error(),
 		Severity:  "ERROR",
 		Component: component,
 		Trace:     trace,
