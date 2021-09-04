@@ -31,7 +31,7 @@ func NewSqlRepositoryImpl() *SqlImpl {
 	return &SqlImpl{Conn: conn}
 }
 
-func (s SqlImpl) Exec(query string, args ...interface{}) (repository.Result, error) {
+func (s *SqlImpl) Exec(query string, args ...interface{}) (repository.Result, error) {
 	result, err := s.Conn.Exec(query, args...)
 	if err != nil {
 		switch err {
