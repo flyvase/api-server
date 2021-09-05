@@ -15,7 +15,3 @@ func GetTraceId(r *http.Request) string {
 	}
 	return ""
 }
-
-func GetAuthToken(r *http.Request) string {
-	return strings.Fields(r.Header.Get("Authorization"))[1]
-}
