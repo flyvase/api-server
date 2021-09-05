@@ -52,17 +52,18 @@ func main() {
 	mux := http.NewServeMux()
 	mux.Handle("/user/", handler.UserHandler(userRepo, authRepo))
 
-	cors.New(cors.Options{
+	c := cors.New(cors.Options{
 		AllowedOrigins: config.AllowedOrigin(),
 		AllowedMethods: []string{http.MethodPost},
-	}).Handler(mux)
+		AllowedHeaders: []string{"Authorization", "Content-Type"},
+	})
 
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 
-	if err := http.ListenAndServe(":"+port, mux); err != nil {
+	if err := http.ListenAndServe(":"+port, c.Handler(mux)); err != nil {
 		panic(err)
 	}
 }
