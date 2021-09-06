@@ -22,3 +22,13 @@ func (a *AuthImpl) VerifyToken(token string) error {
 
 	return nil
 }
+
+func (a *AuthImpl) SetCustomClaim(id string) error {
+	claims := map[string]interface{}{"admin": true}
+	err := a.Client.SetCustomUserClaims(context.Background(), id, claims)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
