@@ -13,8 +13,7 @@ func CreateUser(u entity.User, r repository.User, a repository.Auth) error {
 		return err
 	}
 
-	// TODO: register returned id to firebase authentication custom claim
-	err = a.SetCustomClaim(strconv.FormatInt(id, 10))
+	err = a.SetCustomClaim(u, strconv.FormatInt(id, 10))
 	if err != nil {
 		return err
 	}
