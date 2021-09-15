@@ -24,8 +24,7 @@ func (a *AuthImpl) VerifyToken(token string) error {
 	return nil
 }
 
-func (a *AuthImpl) SetCustomClaim(u entity.User, id string) error {
-	claims := map[string]interface{}{"id": id}
+func (a *AuthImpl) SetCustomClaim(u entity.User, claims map[string]interface{}) error {
 	err := a.Client.SetCustomUserClaims(context.Background(), u.Uid, claims)
 	if err != nil {
 		return err

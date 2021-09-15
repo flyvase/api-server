@@ -13,7 +13,8 @@ func CreateUser(u entity.User, r repository.User, a repository.Auth) error {
 		return err
 	}
 
-	err = a.SetCustomClaim(u, strconv.FormatInt(id, 10))
+	claims := map[string]interface{}{"id": strconv.FormatInt(id, 10)}
+	err = a.SetCustomClaim(u, claims)
 	if err != nil {
 		return err
 	}
