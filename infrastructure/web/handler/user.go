@@ -12,7 +12,7 @@ import (
 
 const uhComponent = "UserHandler"
 
-func userHandler(usr repository.User) http.Handler {
+func userHandler(usr repository.User, aur repository.Auth) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		trace := request.GetTraceId(r)
 
@@ -25,7 +25,7 @@ func userHandler(usr repository.User) http.Handler {
 
 		ue := ur.ToUserEntity()
 
-		if err := controller.CreateUser(ue, usr); err != nil {
+		if err := controller.CreateUser(ue, usr, aur); err != nil {
 			logger.Error(uhComponent, err, trace)
 			switch err.(type) {
 			case exception.SqlConnClosedError:
@@ -46,5 +46,5 @@ func UserHandler(usr repository.User, aur repository.Auth) http.Handler {
 		Methods:     &[]string{http.MethodPost},
 		ContentType: jsonContentType,
 	}
-	return buildHandlerWithDefaultMiddlewares(&opt, userHandler(usr), aur)
+	return buildHandlerWithDefaultMiddlewares(&opt, userHandler(usr, aur), aur)
 }

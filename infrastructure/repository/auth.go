@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"harvest/core/exception"
+	"harvest/domain/entity"
 
 	"firebase.google.com/go/v4/auth"
 )
@@ -17,6 +18,15 @@ func (a *AuthImpl) VerifyToken(token string) error {
 		if auth.IsUnknown(err) {
 			return exception.UnknownError{Message: err.Error()}
 		}
+		return err
+	}
+
+	return nil
+}
+
+func (a *AuthImpl) SetCustomClaim(u entity.User, claims map[string]interface{}) error {
+	err := a.Client.SetCustomUserClaims(context.Background(), u.Uid, claims)
+	if err != nil {
 		return err
 	}
 
