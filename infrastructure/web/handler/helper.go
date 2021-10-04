@@ -15,19 +15,19 @@ type Option struct {
 	ContentType string
 }
 
-func buildHandlerWithDefaultMiddlewares(opt *Option, next http.Handler, aur repository.Auth) http.Handler {
+func buildHandlerWithDefaultMiddlewares(option *Option, next http.Handler, authR repository.Auth) http.Handler {
 	return middleware.Logger(
 		middleware.Auth(
 			middleware.PathValidator(
 				middleware.MethodValidator(
 					middleware.ContentTypeValidator(
-						next, opt.ContentType,
+						next, option.ContentType,
 					),
-					*opt.Methods,
+					*option.Methods,
 				),
-				opt.Path,
+				option.Path,
 			),
-			aur,
+			authR,
 		),
 	)
 }

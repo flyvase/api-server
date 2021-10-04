@@ -12,7 +12,8 @@ import (
 
 	"harvest/config"
 	"harvest/core/logger"
-	"harvest/infrastructure/repository"
+	"harvest/infrastructure/repositoryimpl"
+	"harvest/infrastructure/sql"
 	"harvest/infrastructure/web/handler"
 )
 
@@ -45,9 +46,9 @@ func main() {
 		panic(err)
 	}
 
-	sqlRepo := repository.NewSqlRepositoryImpl()
-	userRepo := &repository.UserImpl{Sql: sqlRepo}
-	authRepo := &repository.AuthImpl{Client: auth}
+	sql := sql.NewSqlImpl()
+	userRepo := &repositoryimpl.User{Sql: sql}
+	authRepo := &repositoryimpl.Auth{Client: auth}
 
 	mux := http.NewServeMux()
 	mux.Handle("/user/", handler.UserHandler(userRepo, authRepo))
@@ -55,7 +56,7 @@ func main() {
 	c := cors.New(cors.Options{
 		AllowedOrigins: config.AllowedOrigin(),
 		AllowedMethods: []string{http.MethodPost},
-		AllowedHeaders: []string{"Authorization", "Content-Type"},
+		AllowedHeaders: []string{"Authorization", "Content-Type", "X-Cloud-Trace-Context"},
 	})
 
 	port := os.Getenv("PORT")

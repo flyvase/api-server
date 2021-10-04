@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"harvest/controller"
-	"harvest/core/exception"
+	"harvest/core/apperror"
 	"harvest/core/logger"
 	"harvest/domain/repository"
 	"harvest/infrastructure/web/request"
@@ -12,7 +12,7 @@ import (
 
 const uhComponent = "UserHandler"
 
-func userHandler(usr repository.User, aur repository.Auth) http.Handler {
+func userHandler(userR repository.User, authR repository.Auth) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		trace := request.GetTraceId(r)
 
@@ -25,12 +25,12 @@ func userHandler(usr repository.User, aur repository.Auth) http.Handler {
 
 		ue := ur.ToUserEntity()
 
-		if err := controller.CreateUser(ue, usr, aur); err != nil {
+		if err := controller.CreateUser(ue, userR, authR); err != nil {
 			logger.Error(uhComponent, err, trace)
 			switch err.(type) {
-			case exception.SqlConnClosedError:
+			case apperror.SqlConnClosed:
 				http.Error(w, "Datasource unavailable", http.StatusInternalServerError)
-			case exception.UnknownError:
+			case apperror.Unknown:
 				http.Error(w, "Unknown error", http.StatusInternalServerError)
 			}
 			return
@@ -40,11 +40,11 @@ func userHandler(usr repository.User, aur repository.Auth) http.Handler {
 	})
 }
 
-func UserHandler(usr repository.User, aur repository.Auth) http.Handler {
+func UserHandler(userR repository.User, authR repository.Auth) http.Handler {
 	opt := Option{
 		Path:        "/user/",
 		Methods:     &[]string{http.MethodPost},
 		ContentType: jsonContentType,
 	}
-	return buildHandlerWithDefaultMiddlewares(&opt, userHandler(usr, aur), aur)
+	return buildHandlerWithDefaultMiddlewares(&opt, userHandler(userR, authR), authR)
 }
