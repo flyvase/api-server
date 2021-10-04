@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"harvest/core/exception"
+	"harvest/core/apperror"
 	"harvest/core/logger"
 	"harvest/domain/repository"
 	"harvest/infrastructure/web/request"
@@ -12,7 +12,7 @@ import (
 
 const aumComponent = "AuthMiddleware"
 
-func Auth(next http.Handler, auth repository.Auth) http.Handler {
+func Auth(next http.Handler, authR repository.Auth) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		authHeader := r.Header.Get("Authorization")
 		if authHeader == "" {
@@ -26,11 +26,11 @@ func Auth(next http.Handler, auth repository.Auth) http.Handler {
 			return
 		}
 
-		if err := auth.VerifyToken(token); err != nil {
+		if err := authR.VerifyToken(token); err != nil {
 			trace := request.GetTraceId(r)
 
 			switch err.(type) {
-			case exception.UnknownError:
+			case apperror.Unknown:
 				logger.Error(aumComponent, err, trace)
 			}
 

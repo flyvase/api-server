@@ -1,4 +1,4 @@
-package repository
+package sql
 
 type Sql interface {
 	Exec(string, ...interface{}) (Result, error)

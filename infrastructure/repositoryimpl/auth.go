@@ -1,22 +1,22 @@
-package repository
+package repositoryimpl
 
 import (
 	"context"
-	"harvest/core/exception"
+	"harvest/core/apperror"
 	"harvest/domain/entity"
 
 	"firebase.google.com/go/v4/auth"
 )
 
-type AuthImpl struct {
+type Auth struct {
 	Client *auth.Client
 }
 
-func (a *AuthImpl) VerifyToken(token string) error {
+func (a *Auth) VerifyToken(token string) error {
 	_, err := a.Client.VerifyIDToken(context.Background(), token)
 	if err != nil {
 		if auth.IsUnknown(err) {
-			return exception.UnknownError{Message: err.Error()}
+			return apperror.Unknown{Message: err.Error()}
 		}
 		return err
 	}
@@ -24,7 +24,7 @@ func (a *AuthImpl) VerifyToken(token string) error {
 	return nil
 }
 
-func (a *AuthImpl) SetCustomClaim(u entity.User, claims map[string]interface{}) error {
+func (a *Auth) SetCustomClaim(u entity.User, claims map[string]interface{}) error {
 	err := a.Client.SetCustomUserClaims(context.Background(), u.Uid, claims)
 	if err != nil {
 		return err

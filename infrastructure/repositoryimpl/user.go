@@ -1,15 +1,15 @@
-package repository
+package repositoryimpl
 
 import (
 	"harvest/domain/entity"
-	"harvest/domain/repository"
+	"harvest/infrastructure/sql"
 )
 
-type UserImpl struct {
-	Sql repository.Sql
+type User struct {
+	Sql sql.Sql
 }
 
-func (u *UserImpl) Create(user entity.User) (int64, error) {
+func (u *User) Create(user entity.User) (int64, error) {
 	res, err := u.Sql.Exec(
 		`insert into users (
 			firebase_uid, first_name, last_name
