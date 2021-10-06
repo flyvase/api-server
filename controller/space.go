@@ -1,15 +1,16 @@
 package controller
 
 import (
+	"harvest/domain/entity"
 	"harvest/domain/repository"
 )
 
-func FetchSpace(spaceR repository.Space) error {
-	err := spaceR.Fetch()
+func FetchSpace(spaceR repository.Space) ([]entity.Space, error) {
+	spaces, err := spaceR.Fetch()
 
 	if err != nil {
-		return err
+		return spaces, err
 	}
 
-	return nil
+	return spaces, nil
 }

@@ -1,8 +1,7 @@
 package repositoryimpl
 
 import (
-	"fmt"
-	"harvest/core/logger"
+	"harvest/domain/entity"
 	"harvest/infrastructure/sql"
 	"log"
 )
@@ -16,31 +15,34 @@ type Spaces struct {
 	Name string `db:"name"`
 }
 
-func (s *Space) Fetch() (error) {
+func (s *Space) Fetch() ([]entity.Space, error) {
 	rows, err := s.Sql.Query(
 		"select * from spaces",
 	)
 
+	var se entity.Space
+	var spaces []entity.Space
+
 	if err != nil {
-		return err
+		return spaces, err
 	}
 
-	// 以下サンプルをコピペ中
 	defer rows.Close()
 
-	var s2 Spaces
 	for rows.Next() {
-		err := rows.Scan(&s2.ID, &s2.Name)
+		err := rows.Scan(&se.Id, &se.Name)
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf("ID: %d, Name: %s\n", s2.ID, s2.Name)
+
+		spaces = append(spaces, se)
 	}
+
 	err = rows.Err()
+
 	if err != nil {
 		log.Fatal(err)
 	}
-	logger.Debug("ok", "space")
 
-	return nil
+	return spaces, nil
 }
