@@ -49,13 +49,15 @@ func main() {
 	sql := sql.NewSqlImpl()
 	userRepo := &repositoryimpl.User{Sql: sql}
 	authRepo := &repositoryimpl.Auth{Client: auth}
+	spaceRepo := &repositoryimpl.Space{Sql: sql}
 
 	mux := http.NewServeMux()
 	mux.Handle("/user/", handler.UserHandler(userRepo, authRepo))
+	mux.Handle("/space/", handler.SpaceHandler(spaceRepo, authRepo))
 
 	c := cors.New(cors.Options{
 		AllowedOrigins: config.AllowedOrigin(),
-		AllowedMethods: []string{http.MethodPost},
+		AllowedMethods: []string{http.MethodPost, http.MethodGet},
 		AllowedHeaders: []string{"Authorization", "Content-Type", "X-Cloud-Trace-Context"},
 	})
 
