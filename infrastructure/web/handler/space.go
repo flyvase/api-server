@@ -17,7 +17,8 @@ func spaceHandler(spaceR repository.Space) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		trace := request.GetTraceId(r)
 
-		if spaces, err := controller.FetchSpace(spaceR); err != nil {
+		spaces, err := controller.FetchSpace(spaceR);
+		if err != nil {
 			logger.Error(shComponent, err, trace)
 			switch err.(type) {
 			case apperror.SqlConnClosed:
@@ -26,11 +27,19 @@ func spaceHandler(spaceR repository.Space) http.Handler {
 				http.Error(w, "Unknown error", http.StatusInternalServerError)
 			}
 			return
-		} else {
-			response.MarshalSpaceResponseJson(w, spaces)
 		}
 
+		json, err := response.MarshalSpaceResponseJson(w, spaces)
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+
 		w.WriteHeader(http.StatusCreated)
+		w.Write(json)
 	})
 }
 

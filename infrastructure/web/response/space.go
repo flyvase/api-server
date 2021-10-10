@@ -7,25 +7,18 @@ import (
 )
 
 type Space struct {
-	Id   uint32 `json:"id" validate:"required,max=255"`
-	Name string `json:"name" validate:"required,max=150"`
+	Id   uint32 `json:"id"`
+	Name string `json:"name"`
 }
 
-func MarshalSpaceResponseJson(w http.ResponseWriter, se []entity.Space) error {
+func MarshalSpaceResponseJson(w http.ResponseWriter, entities []entity.Space) ([]byte, error) {
 	var spaces []Space
-	for _, s := range se {
-	  var ms Space = Space{s.Id, s.Name}
-		spaces = append(spaces, ms)
+	for _, se := range entities {
+	  s := Space{se.Id, se.Name}
+		spaces = append(spaces, s)
 	}
 
 	js, err := json.Marshal(spaces)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return err
-	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(js)
-
-	return nil
+	return js, err
 }

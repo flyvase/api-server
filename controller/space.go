@@ -9,7 +9,7 @@ func FetchSpace(spaceR repository.Space) ([]entity.Space, error) {
 	spaces, err := spaceR.Fetch()
 
 	if err != nil {
-		return spaces, err
+		return nil, err
 	}
 
 	return spaces, nil

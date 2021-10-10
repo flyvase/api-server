@@ -1,16 +1,17 @@
 package sql
 
-import "database/sql"
-
 type Sql interface {
 	Exec(string, ...interface{}) (Result, error)
-	Query(string, ...interface{}) (*sql.Rows, error)
+	Query(string, ...interface{}) (Rows, error)
 }
 
 type Result interface {
 	LastInsertId() (int64, error)
 }
 
-// type Row interface {
-// 	Hoge()
-// }
+type Rows interface {
+	Next() bool
+	Scan(dest ...interface{}) error
+	Close() error
+	Err() error
+}
