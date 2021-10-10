@@ -3,7 +3,6 @@ package response
 import (
 	"encoding/json"
 	"harvest/domain/entity"
-	"net/http"
 )
 
 type Space struct {
@@ -11,7 +10,7 @@ type Space struct {
 	Name string `json:"name"`
 }
 
-func MarshalSpaceResponseJson(w http.ResponseWriter, entities []entity.Space) ([]byte, error) {
+func EncodeSpaceEntities(entities []entity.Space) ([]byte, error) {
 	var spaces []Space
 	for _, se := range entities {
 	  s := Space{se.Id, se.Name}
@@ -20,5 +19,9 @@ func MarshalSpaceResponseJson(w http.ResponseWriter, entities []entity.Space) ([
 
 	js, err := json.Marshal(spaces)
 
-	return js, err
+	if err != nil {
+    return nil, err
+	}
+
+	return js, nil
 }

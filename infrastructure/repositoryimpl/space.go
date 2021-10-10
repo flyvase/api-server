@@ -25,17 +25,14 @@ func (s *Space) Fetch() ([]entity.Space, error) {
 
 	for rows.Next() {
 		var se entity.Space
-		err := rows.Scan(&se.Id, &se.Name)
-		if err != nil {
+		if err := rows.Scan(&se.Id, &se.Name); err != nil {
 			return nil, err
 		}
 
 		spaces = append(spaces, se)
 	}
 
-	err = rows.Err()
-
-	if err != nil {
+	if err := rows.Err(); err != nil {
 		return nil, err
 	}
 

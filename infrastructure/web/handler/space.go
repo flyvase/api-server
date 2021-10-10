@@ -29,16 +29,17 @@ func spaceHandler(spaceR repository.Space) http.Handler {
 			return
 		}
 
-		json, err := response.MarshalSpaceResponseJson(w, spaces)
+		json, err := response.EncodeSpaceEntities(spaces)
 
 		if err != nil {
+			logger.Error(shComponent, err, trace)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
 		w.Header().Set("Content-Type", "application/json")
 
-		w.WriteHeader(http.StatusCreated)
+		w.WriteHeader(http.StatusOK)
 		w.Write(json)
 	})
 }

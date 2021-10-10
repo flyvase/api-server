@@ -18,23 +18,23 @@ func (r ResultImpl) LastInsertId() (int64, error) {
 	return r.Original.LastInsertId()
 }
 
-type RowImpl struct {
+type RowsImpl struct {
   Original *sql.Rows
 }
 
-func (r RowImpl) Next() (bool) {
+func (r RowsImpl) Next() (bool) {
 	return r.Original.Next()
 }
 
-func (r RowImpl) Scan(dest ...interface{}) (error) {
+func (r RowsImpl) Scan(dest ...interface{}) (error) {
 	return r.Original.Scan(dest...)
 }
 
-func (r RowImpl) Close() (error) {
+func (r RowsImpl) Close() (error) {
 	return r.Original.Close()
 }
 
-func (r RowImpl) Err() (error) {
+func (r RowsImpl) Err() (error) {
 	return r.Original.Err()
 }
 
@@ -76,5 +76,5 @@ func (s *SqlImpl) Query(query string, args ...interface{}) (Rows, error) {
 		}
 	}
 
-	return RowImpl{Original: rows}, nil
+	return RowsImpl{Original: rows}, nil
 }
