@@ -14,7 +14,6 @@ func (s *Space) Fetch() ([]entity.Space, error) {
 		"select * from spaces",
 	)
 
-
 	if err != nil {
 		return nil, err
 	}
