@@ -13,28 +13,27 @@ type ResultImpl struct {
 	Original sql.Result
 }
 
-
 func (r ResultImpl) LastInsertId() (int64, error) {
 	return r.Original.LastInsertId()
 }
 
 type RowsImpl struct {
-  Original *sql.Rows
+	Original *sql.Rows
 }
 
-func (r RowsImpl) Next() (bool) {
+func (r RowsImpl) Next() bool {
 	return r.Original.Next()
 }
 
-func (r RowsImpl) Scan(dest ...interface{}) (error) {
+func (r RowsImpl) Scan(dest ...interface{}) error {
 	return r.Original.Scan(dest...)
 }
 
-func (r RowsImpl) Close() (error) {
+func (r RowsImpl) Close() error {
 	return r.Original.Close()
 }
 
-func (r RowsImpl) Err() (error) {
+func (r RowsImpl) Err() error {
 	return r.Original.Err()
 }
 

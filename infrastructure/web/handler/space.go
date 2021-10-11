@@ -17,7 +17,7 @@ func spaceHandler(spaceR repository.Space) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		trace := request.GetTraceId(r)
 
-		spaces, err := controller.FetchSpace(spaceR);
+		spaces, err := controller.FetchSpace(spaceR)
 		if err != nil {
 			logger.Error(shComponent, err, trace)
 			switch err.(type) {
