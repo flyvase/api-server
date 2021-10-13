@@ -9,9 +9,7 @@ type Group struct {
 
 func Demux(group *Group) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		method := r.Method
-
-		switch method {
+		switch r.Method {
 		case "GET":
 			group.Get.ServeHTTP(w, r)
 		case "POST":
