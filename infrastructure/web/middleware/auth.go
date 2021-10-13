@@ -10,9 +10,7 @@ import (
 	"harvest/infrastructure/web/request"
 )
 
-const aumComponent = "AuthMiddleware"
-
-func Auth(next http.Handler, authR repository.Auth) http.Handler {
+func auth(authR repository.Auth, next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		authHeader := r.Header.Get("Authorization")
 		if authHeader == "" {
@@ -31,7 +29,7 @@ func Auth(next http.Handler, authR repository.Auth) http.Handler {
 
 			switch err.(type) {
 			case apperror.Unknown:
-				logger.Error(aumComponent, err, trace)
+				logger.Error("AuthMiddleware", err, trace)
 			}
 
 			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
