@@ -15,6 +15,7 @@ import (
 	"harvest/infrastructure/repositoryimpl"
 	"harvest/infrastructure/sql"
 	"harvest/infrastructure/web/handler"
+	"harvest/infrastructure/web/middleware"
 )
 
 func initializeFirebase() *firebase.App {
@@ -52,8 +53,16 @@ func main() {
 	spaceRepo := &repositoryimpl.Space{Sql: sql}
 
 	mux := http.NewServeMux()
-	mux.Handle("/user/", handler.UserHandler(userRepo, authRepo))
-	mux.Handle("/space/", handler.SpaceHandler(spaceRepo, authRepo))
+	mux.Handle("/user", middleware.Demux(
+		&middleware.Group{
+			Post: handler.UserPost(authRepo, userRepo),
+		},
+	))
+	mux.Handle("/space", middleware.Demux(
+		&middleware.Group{
+			Get: handler.SpaceGet(authRepo, spaceRepo),
+		},
+	))
 
 	c := cors.New(cors.Options{
 		AllowedOrigins: config.AllowedOrigin(),
