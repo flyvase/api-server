@@ -53,12 +53,12 @@ func main() {
 	spaceRepo := &repositoryimpl.Space{Sql: sql}
 
 	mux := http.NewServeMux()
-	mux.Handle("/user", middleware.Demux(
+	mux.Handle("/user/", middleware.Demux(
 		&middleware.Group{
 			Post: handler.UserPost(authRepo, userRepo),
 		},
 	))
-	mux.Handle("/space", middleware.Demux(
+	mux.Handle("/space/", middleware.Demux(
 		&middleware.Group{
 			Get: handler.SpaceGet(authRepo, spaceRepo),
 		},

@@ -16,7 +16,7 @@ func UserPost(authR repository.Auth, userR repository.User) http.Handler {
 		authR,
 		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			path := r.URL.Path
-			if path != "user" {
+			if path != "/user/" {
 				http.NotFound(w, r)
 				return
 			}

@@ -17,7 +17,7 @@ func SpaceGet(authR repository.Auth, spaceR repository.Space) http.Handler {
 		authR,
 		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			path := r.URL.Path
-			if path != "space" {
+			if path != "/space/" {
 				http.NotFound(w, r)
 				return
 			}
