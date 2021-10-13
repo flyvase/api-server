@@ -41,7 +41,7 @@ func SpaceGet(authR repository.Auth, spaceR repository.Space) http.Handler {
 
 			if err != nil {
 				logger.Error(component, err, trace)
-				http.Error(w, err.Error(), http.StatusInternalServerError)
+				http.Error(w, "Json encode error", http.StatusInternalServerError)
 				return
 			}
 
