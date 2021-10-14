@@ -9,12 +9,11 @@ import (
 	"harvest/config"
 )
 
-const timeStamp = "15:04:05"
-
-func Logger(next http.Handler) http.Handler {
+func requestLogger(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if config.Mode == "debug" {
-			msg := fmt.Sprintf("[%v] path: %s, method: %s", time.Now().Format(timeStamp), r.URL.Path, r.Method)
+			// https://pkg.go.dev/time#pkg-constants
+			msg := fmt.Sprintf("[%v] path: %s, method: %s", time.Now().Format("15:04:05"), r.URL.Path, r.Method)
 			log.Println(msg)
 		}
 
