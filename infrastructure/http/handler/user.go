@@ -7,8 +7,8 @@ import (
 	"harvest/core/apperror"
 	"harvest/core/logger"
 	"harvest/domain/repository"
-	"harvest/infrastructure/web/middleware"
-	"harvest/infrastructure/web/request"
+	"harvest/infrastructure/http/middleware"
+	"harvest/infrastructure/http/request"
 )
 
 func UserPost(authR repository.Auth, userR repository.User) http.Handler {

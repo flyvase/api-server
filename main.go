@@ -12,10 +12,10 @@ import (
 
 	"harvest/config"
 	"harvest/core/logger"
+	"harvest/infrastructure/http/handler"
+	"harvest/infrastructure/http/middleware"
 	"harvest/infrastructure/repositoryimpl"
 	"harvest/infrastructure/sql"
-	"harvest/infrastructure/web/handler"
-	"harvest/infrastructure/web/middleware"
 )
 
 func initializeFirebase() *firebase.App {

@@ -7,9 +7,9 @@ import (
 	"harvest/core/apperror"
 	"harvest/core/logger"
 	"harvest/domain/repository"
-	"harvest/infrastructure/web/middleware"
-	"harvest/infrastructure/web/request"
-	"harvest/infrastructure/web/response"
+	"harvest/infrastructure/http/middleware"
+	"harvest/infrastructure/http/request"
+	"harvest/infrastructure/http/response"
 )
 
 func SpaceGet(authR repository.Auth, spaceR repository.Space) http.Handler {

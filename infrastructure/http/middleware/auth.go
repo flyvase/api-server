@@ -7,7 +7,7 @@ import (
 	"harvest/core/apperror"
 	"harvest/core/logger"
 	"harvest/domain/repository"
-	"harvest/infrastructure/web/request"
+	"harvest/infrastructure/http/request"
 )
 
 func auth(authR repository.Auth, next http.Handler) http.Handler {
