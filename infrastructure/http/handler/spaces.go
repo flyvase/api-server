@@ -12,20 +12,14 @@ import (
 	"harvest/infrastructure/http/response"
 )
 
-func SpaceGet(authR repository.Auth, spaceR repository.Space) http.Handler {
+func SpacesGet(authR repository.Auth, spaceR repository.Space) http.Handler {
 	return middleware.DefaultGetMiddlewares(
 		authR,
 		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			path := r.URL.Path
-			if path != "/space/" {
-				http.NotFound(w, r)
-				return
-			}
-
-			const component = "SpaceGetHandler"
+			const component = "SpacesGetHandler"
 			trace := request.GetTraceId(r)
 
-			spaces, err := controller.FetchSpace(spaceR)
+			spaces, err := controller.ListSpace(spaceR)
 			if err != nil {
 				logger.Error(component, err, trace)
 				switch err.(type) {

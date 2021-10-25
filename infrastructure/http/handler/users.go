@@ -11,17 +11,11 @@ import (
 	"harvest/infrastructure/http/request"
 )
 
-func UserPost(authR repository.Auth, userR repository.User) http.Handler {
+func UsersPost(authR repository.Auth, userR repository.User) http.Handler {
 	return middleware.DefaultPostMiddlewares(
 		authR,
 		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			path := r.URL.Path
-			if path != "/user/" {
-				http.NotFound(w, r)
-				return
-			}
-
-			const component = "UserPostHandler"
+			const component = "UsersPostHandler"
 			trace := request.GetTraceId(r)
 
 			var body request.User
