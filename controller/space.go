@@ -5,8 +5,8 @@ import (
 	"harvest/domain/repository"
 )
 
-func FetchSpace(spaceR repository.Space) ([]entity.Space, error) {
-	spaces, err := spaceR.Fetch()
+func ListSpace(spaceR repository.Space) ([]entity.Space, error) {
+	spaces, err := spaceR.List()
 
 	if err != nil {
 		return nil, err

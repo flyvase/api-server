@@ -9,7 +9,7 @@ type Space struct {
 	Sql sql.Sql
 }
 
-func (s *Space) Fetch() ([]entity.Space, error) {
+func (s *Space) List() ([]entity.Space, error) {
 	rows, err := s.Sql.Query(
 		"select * from spaces",
 	)

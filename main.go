@@ -7,15 +7,16 @@ import (
 	"os"
 
 	firebase "firebase.google.com/go/v4"
+	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 	"google.golang.org/api/option"
 
 	"harvest/config"
 	"harvest/core/logger"
+	"harvest/infrastructure/http/handler"
+	"harvest/infrastructure/http/middleware"
 	"harvest/infrastructure/repositoryimpl"
 	"harvest/infrastructure/sql"
-	"harvest/infrastructure/web/handler"
-	"harvest/infrastructure/web/middleware"
 )
 
 func initializeFirebase() *firebase.App {
@@ -52,17 +53,9 @@ func main() {
 	authRepo := &repositoryimpl.Auth{Client: auth}
 	spaceRepo := &repositoryimpl.Space{Sql: sql}
 
-	mux := http.NewServeMux()
-	mux.Handle("/user/", middleware.Demux(
-		&middleware.Group{
-			Post: handler.UserPost(authRepo, userRepo),
-		},
-	))
-	mux.Handle("/space/", middleware.Demux(
-		&middleware.Group{
-			Get: handler.SpaceGet(authRepo, spaceRepo),
-		},
-	))
+	mux := mux.NewRouter()
+	mux.Handle("/users/", middleware.Demux(&middleware.Group{Post: handler.UsersPost(authRepo, userRepo)}))
+	mux.Handle("/spaces/", middleware.Demux(&middleware.Group{Get: handler.SpacesGet(authRepo, spaceRepo)}))
 
 	c := cors.New(cors.Options{
 		AllowedOrigins: config.AllowedOrigin(),
