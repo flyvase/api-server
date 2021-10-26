@@ -31,7 +31,7 @@ func UsersPost(authR repository.Auth, userR repository.User) http.Handler {
 				logger.Error(component, err, trace)
 				switch err.(type) {
 				case apperror.SqlConnClosed:
-					http.Error(w, "Datasource unavailable", http.StatusInternalServerError)
+					http.Error(w, "Database is not available", http.StatusInternalServerError)
 				default:
 					http.Error(w, "Unknown error", http.StatusInternalServerError)
 				}
