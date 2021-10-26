@@ -6,10 +6,5 @@ import (
 )
 
 func CreateUser(user entity.User, userR repository.User, authR repository.Auth) error {
-	_, err := userR.Create(user)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return userR.Create(user)
 }
