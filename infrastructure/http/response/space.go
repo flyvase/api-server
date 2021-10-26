@@ -25,3 +25,8 @@ func EncodeSpaceEntities(entities []entity.Space) ([]byte, error) {
 
 	return js, nil
 }
+
+func EncodeSpaceEntity(entity *entity.Space) ([]byte, error) {
+	s := Space{entity.Id, entity.Name}
+	return json.Marshal(s)
+}

@@ -56,6 +56,7 @@ func main() {
 	mux := mux.NewRouter()
 	mux.Handle("/users/", middleware.Demux(&middleware.Group{Post: handler.UsersPost(authRepo, userRepo)}))
 	mux.Handle("/spaces/", middleware.Demux(&middleware.Group{Get: handler.SpacesGet(authRepo, spaceRepo)}))
+	mux.Handle("/spaces/{space_id:[0-9]{0,10}}", middleware.Demux(&middleware.Group{Get: handler.SpaceDetailsGet(authRepo, spaceRepo)}))
 
 	c := cors.New(cors.Options{
 		AllowedOrigins: config.AllowedOrigin(),
