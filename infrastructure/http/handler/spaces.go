@@ -19,7 +19,7 @@ func SpacesGet(authR repository.Auth, spaceR repository.Space) http.Handler {
 			const component = "SpacesGetHandler"
 			trace := request.GetTraceId(r)
 
-			spaces, err := controller.ListSpace(spaceR)
+			spaces, err := controller.ListSpaces(spaceR)
 			if err != nil {
 				logger.Error(component, err, trace)
 				switch err.(type) {
