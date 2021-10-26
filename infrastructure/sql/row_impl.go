@@ -1,13 +1,24 @@
 package sql
 
-import "database/sql"
+import (
+	"database/sql"
+	"harvest/core/apperror"
+)
 
 type RowImpl struct {
 	Original *sql.Row
 }
 
 func (r *RowImpl) Scan(dest ...interface{}) error {
-	return r.Original.Scan(dest...)
+	if err := r.Original.Scan(dest...); err != nil {
+		if err == sql.ErrNoRows {
+			return apperror.EmptySqlResult{Message: err.Error()}
+		} else {
+			return apperror.Unknown{Message: err.Error()}
+		}
+	}
+
+	return nil
 }
 
 func (r *RowImpl) Err() error {

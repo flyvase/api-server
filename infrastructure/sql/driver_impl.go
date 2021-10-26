@@ -3,6 +3,8 @@ package sql
 import (
 	"database/sql"
 
+	_ "github.com/go-sql-driver/mysql"
+
 	"harvest/config"
 	"harvest/core/apperror"
 )
