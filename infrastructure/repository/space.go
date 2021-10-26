@@ -31,9 +31,23 @@ func (sr *Space) List() ([]entity.Space, error) {
 		spaces = append(spaces, se)
 	}
 
-	if err := rows.Err(); err != nil {
+	return spaces, nil
+}
+
+func (sr *Space) Fetch(id uint32) (*entity.Space, error) {
+	row, err := sr.Driver.QueryRow(
+		`select * from spaces where id = ?`,
+		id,
+	)
+
+	if err != nil {
 		return nil, err
 	}
 
-	return spaces, nil
+	var se entity.Space
+	if err := row.Scan(&se.Id, &se.Name); err != nil {
+		return nil, err
+	}
+
+	return &se, nil
 }
