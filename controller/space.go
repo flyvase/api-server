@@ -6,11 +6,5 @@ import (
 )
 
 func ListSpace(spaceR repository.Space) ([]entity.Space, error) {
-	spaces, err := spaceR.List()
-
-	if err != nil {
-		return nil, err
-	}
-
-	return spaces, nil
+	return spaceR.List()
 }

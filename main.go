@@ -15,7 +15,7 @@ import (
 	"harvest/core/logger"
 	"harvest/infrastructure/http/handler"
 	"harvest/infrastructure/http/middleware"
-	"harvest/infrastructure/repositoryimpl"
+	"harvest/infrastructure/repository"
 	"harvest/infrastructure/sql"
 )
 
@@ -48,10 +48,10 @@ func main() {
 		panic(err)
 	}
 
-	sql := sql.NewSqlImpl()
-	userRepo := &repositoryimpl.User{Sql: sql}
-	authRepo := &repositoryimpl.Auth{Client: auth}
-	spaceRepo := &repositoryimpl.Space{Sql: sql}
+	driver := sql.NewDriverImpl()
+	userRepo := &repository.User{Driver: driver}
+	authRepo := &repository.Auth{Client: auth}
+	spaceRepo := &repository.Space{Driver: driver}
 
 	mux := mux.NewRouter()
 	mux.Handle("/users/", middleware.Demux(&middleware.Group{Post: handler.UsersPost(authRepo, userRepo)}))

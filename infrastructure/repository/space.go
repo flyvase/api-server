@@ -1,4 +1,4 @@
-package repositoryimpl
+package repository
 
 import (
 	"harvest/domain/entity"
@@ -6,11 +6,11 @@ import (
 )
 
 type Space struct {
-	Sql sql.Sql
+	Driver sql.Driver
 }
 
-func (s *Space) List() ([]entity.Space, error) {
-	rows, err := s.Sql.Query(
+func (sr *Space) List() ([]entity.Space, error) {
+	rows, err := sr.Driver.Query(
 		"select * from spaces",
 	)
 
