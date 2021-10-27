@@ -7,3 +7,11 @@ type SqlConnClosed struct {
 func (e SqlConnClosed) Error() string {
 	return e.Message
 }
+
+type EmptySqlResult struct {
+	Message string
+}
+
+func (e EmptySqlResult) Error() string {
+	return e.Message
+}
