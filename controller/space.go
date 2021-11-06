@@ -5,7 +5,7 @@ import (
 	"harvest/domain/repository"
 )
 
-func ListSpaces(spaceR repository.Space) ([]entity.Space, error) {
+func ListSpaces(spaceR repository.Space) ([]*entity.Space, error) {
 	return spaceR.List()
 }
 

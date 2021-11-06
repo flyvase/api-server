@@ -10,7 +10,7 @@ type Space struct {
 	Name string `json:"name"`
 }
 
-func EncodeSpaceEntities(entities []entity.Space) ([]byte, error) {
+func EncodeSpaceEntities(entities []*entity.Space) ([]byte, error) {
 	var spaces []Space
 	for _, se := range entities {
 		s := Space{se.Id, se.Name}

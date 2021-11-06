@@ -9,7 +9,7 @@ type Space struct {
 	Driver sql.Driver
 }
 
-func (sr *Space) List() ([]entity.Space, error) {
+func (sr *Space) List() ([]*entity.Space, error) {
 	rows, err := sr.Driver.Query(
 		"select * from spaces",
 	)
@@ -20,7 +20,7 @@ func (sr *Space) List() ([]entity.Space, error) {
 
 	defer rows.Close()
 
-	var spaces []entity.Space
+	var spaces []*entity.Space
 
 	for rows.Next() {
 		var se entity.Space
@@ -28,7 +28,7 @@ func (sr *Space) List() ([]entity.Space, error) {
 			return nil, err
 		}
 
-		spaces = append(spaces, se)
+		spaces = append(spaces, &se)
 	}
 
 	return spaces, nil
