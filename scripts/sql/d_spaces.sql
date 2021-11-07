@@ -1,4 +1,3 @@
--- Only for local development env
 use mr_president;
 
 create table spaces (

@@ -1,4 +1,3 @@
--- Only for local development env
 create database mr_president;
 
 create user harvest identified by 'FM5fX|jt(gdv-N%L';
