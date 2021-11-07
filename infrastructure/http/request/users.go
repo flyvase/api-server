@@ -9,16 +9,12 @@ import (
 )
 
 type User struct {
-	Uid       string `json:"uid" validate:"required,max=255"`
-	FirstName string `json:"first_name" validate:"required,max=100"`
-	LastName  string `json:"last_name" validate:"required,max=100"`
+	Uid string `json:"uid" validate:"required,max=255"`
 }
 
 func (u User) ToUserEntity() entity.User {
 	return entity.User{
-		Uid:       u.Uid,
-		FirstName: u.FirstName,
-		LastName:  u.LastName,
+		Uid: u.Uid,
 	}
 }
 
