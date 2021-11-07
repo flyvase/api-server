@@ -2,11 +2,10 @@ package request
 
 import (
 	"encoding/json"
+	"harvest/domain/entity"
 	"io"
 
 	"github.com/go-playground/validator"
-
-	"harvest/domain/entity"
 )
 
 type User struct {
@@ -23,7 +22,7 @@ func (u User) ToUserEntity() entity.User {
 	}
 }
 
-func DecodeUserRequestJson(r io.Reader, u *User) error {
+func DecodeUsersPostRequest(r io.Reader, u *User) error {
 	dec := json.NewDecoder(r)
 	if err := dec.Decode(u); err != nil {
 		return err

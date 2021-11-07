@@ -19,7 +19,7 @@ func UsersPost(authR repository.Auth, userR repository.User) http.Handler {
 			trace := request.GetTraceId(r)
 
 			var body request.User
-			if err := request.DecodeUserRequestJson(r.Body, &body); err != nil {
+			if err := request.DecodeUsersPostRequest(r.Body, &body); err != nil {
 				logger.Error(component, err, trace)
 				http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 				return
