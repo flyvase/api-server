@@ -12,8 +12,8 @@ type User struct {
 func (ur *User) Create(user entity.User) error {
 	err := ur.Driver.Exec(
 		`insert into users (
-			firebase_uid, first_name, last_name
-		) values (?, ?, ?)`, user.Uid, user.FirstName, user.LastName,
+			firebase_uid
+		) values (?)`, user.Uid,
 	)
 	return err
 }
