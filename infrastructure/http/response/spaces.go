@@ -10,15 +10,20 @@ type Space struct {
 	Name string `json:"name"`
 }
 
+type Spaces struct {
+	List []*Space `json:"list"`
+}
+
 func EncodeSpaceEntities(entities []*entity.Space) ([]byte, error) {
-	var spaces []Space
+	var list []*Space
 	for _, se := range entities {
 		s := Space{se.Id, se.Name}
-		spaces = append(spaces, s)
+		list = append(list, &s)
 	}
 
-	js, err := json.Marshal(spaces)
+	spaces := Spaces{List: list}
 
+	js, err := json.Marshal(spaces)
 	if err != nil {
 		return nil, err
 	}
