@@ -1,0 +1,50 @@
+use mr_president;
+
+create table users (
+  id int unsigned primary key auto_increment,
+  firebase_uid varchar(255) not null unique,
+  created_at datetime not null default current_timestamp,
+  updated_at datetime not null default current_timestamp on update current_timestamp,
+  deleted_at datetime
+);
+
+create table space_owners (
+  id int unsigned primary key auto_increment,
+  name varchar(120) not null,
+  created_at datetime not null default current_timestamp,
+  updated_at datetime not null default current_timestamp on update current_timestamp,
+  deleted_at datetime
+);
+
+create table spaces (
+  id int unsigned primary key auto_increment,
+  owner_id int unsigned,
+  foreign key (owner_id) references space_owners(id) on delete cascade on update cascade,
+  headline varchar(240) not null,
+  access varchar(80),
+  number_of_visitors int unsigned,
+  main_customers_sex char(1) not null default '0',
+  min_main_customers_age tinyint unsigned,
+  max_main_customers_age tinyint unsigned,
+  price int unsigned,
+  website_url text,
+  coordinate point,
+  created_at datetime not null default current_timestamp,
+  updated_at datetime not null default current_timestamp on update current_timestamp,
+  deleted_at datetime
+);
+
+create table space_images (
+  id int unsigned primary key auto_increment,
+  space_id int unsigned,
+  image_url text,
+  foreign key (space_id) references spaces(id) on delete cascade on update cascade
+);
+
+create table space_displayers (
+  id int unsigned primary key auto_increment,
+  space_id int unsigned,
+  image_url text,
+  description varchar(120),
+  foreign key (space_id) references spaces(id) on delete cascade on update cascade
+);
