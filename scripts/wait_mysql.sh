@@ -3,4 +3,4 @@ until mysqladmin ping -h mysql --silent; do
   sleep 2
 done
 
-exec go run main.go
+exec go run src/main.go
