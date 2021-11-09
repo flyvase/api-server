@@ -24,7 +24,7 @@ func (sr *Space) List() ([]*entity.Space, error) {
 
 	for rows.Next() {
 		var se entity.Space
-		if err := rows.Scan(&se.Id, &se.Name); err != nil {
+		if err := rows.Scan(&se.Id, &se.Headline); err != nil {
 			return nil, err
 		}
 
@@ -45,7 +45,7 @@ func (sr *Space) Fetch(id uint32) (*entity.Space, error) {
 	}
 
 	var se entity.Space
-	if err := row.Scan(&se.Id, &se.Name); err != nil {
+	if err := row.Scan(&se.Id, &se.Headline); err != nil {
 		return nil, err
 	}
 
