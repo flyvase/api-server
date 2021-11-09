@@ -27,7 +27,7 @@ type Space struct {
 	Headline            string
 	Access              string
 	NumberOfVisitors    uint32
-	MainCustomersSex    string
+	MainCustomersSex    string // using string temporarily
 	MinMainCustomersAge uint8
 	MaxMainCustomersAge uint8
 	Price               uint32
