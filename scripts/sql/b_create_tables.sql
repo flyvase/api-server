@@ -37,14 +37,20 @@ create table spaces (
 create table space_images (
   id int unsigned primary key auto_increment,
   space_id int unsigned,
+  foreign key (space_id) references spaces(id) on delete cascade on update cascade,
   image_url text,
-  foreign key (space_id) references spaces(id) on delete cascade on update cascade
+  created_at datetime not null default current_timestamp,
+  updated_at datetime not null default current_timestamp on update current_timestamp,
+  deleted_at datetime
 );
 
 create table space_displayers (
   id int unsigned primary key auto_increment,
   space_id int unsigned,
+  foreign key (space_id) references spaces(id) on delete cascade on update cascade,
   image_url text,
   description varchar(120),
-  foreign key (space_id) references spaces(id) on delete cascade on update cascade
+  created_at datetime not null default current_timestamp,
+  updated_at datetime not null default current_timestamp on update current_timestamp,
+  deleted_at datetime
 );
