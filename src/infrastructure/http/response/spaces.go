@@ -6,8 +6,8 @@ import (
 )
 
 type Space struct {
-	Id   uint32 `json:"id"`
-	Name string `json:"name"`
+	Id       uint32 `json:"id"`
+	Headline string `json:"headline"`
 }
 
 type Spaces struct {
@@ -17,7 +17,7 @@ type Spaces struct {
 func EncodeSpaceEntities(entities []*entity.Space) ([]byte, error) {
 	var list []*Space
 	for _, se := range entities {
-		s := Space{se.Id, se.Name}
+		s := Space{se.Id, se.Headline}
 		list = append(list, &s)
 	}
 
@@ -32,6 +32,6 @@ func EncodeSpaceEntities(entities []*entity.Space) ([]byte, error) {
 }
 
 func EncodeSpaceEntity(entity *entity.Space) ([]byte, error) {
-	s := Space{entity.Id, entity.Name}
+	s := Space{entity.Id, entity.Headline}
 	return json.Marshal(s)
 }
