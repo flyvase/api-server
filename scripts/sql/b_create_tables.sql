@@ -23,6 +23,7 @@ create table spaces (
   headline varchar(240) not null,
   access varchar(80),
   number_of_visitors int unsigned,
+  -- based on ISO5218
   main_customers_sex char(1) not null default '0',
   min_main_customers_age tinyint unsigned,
   max_main_customers_age tinyint unsigned,
