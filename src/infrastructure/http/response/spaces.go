@@ -3,6 +3,7 @@ package response
 import (
 	"encoding/json"
 	"harvest/src/domain/entity"
+	"harvest/src/domain/object"
 )
 
 type Space struct {
@@ -18,6 +19,21 @@ type Space struct {
 
 type Spaces struct {
 	List []*Space `json:"list"`
+}
+
+type SpaceDetail struct {
+	Id                  uint32
+	Headline            string
+	Access              string
+	NumberOfVisitors    uint32
+	MainCustomersSex    string // using string temporarily
+	MinMainCustomersAge uint8
+	MaxMainCustomersAge uint8
+	Price               uint32
+	WebsiteUrl          string
+	Coordinate          object.GeoPoint
+	Images              []*entity.SpaceImage
+	Displayers          []*entity.SpaceDisplayer
 }
 
 func EncodeSpaceEntities(entities []*entity.Space) ([]byte, error) {
@@ -38,6 +54,6 @@ func EncodeSpaceEntities(entities []*entity.Space) ([]byte, error) {
 }
 
 func EncodeSpaceEntity(entity *entity.Space) ([]byte, error) {
-	s := Space{entity.Id, entity.Headline}
+	s := SpaceDetail{entity.Id, entity.Headline, entity.Access, entity.NumberOfVisitors, entity.MainCustomersSex, entity.MinMainCustomersAge, entity.MaxMainCustomersAge, entity.Price, entity.WebsiteUrl, entity.Coordinate, entity.Images, entity.Displayers}
 	return json.Marshal(s)
 }
