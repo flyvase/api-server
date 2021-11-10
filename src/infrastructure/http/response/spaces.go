@@ -9,12 +9,12 @@ import (
 type Space struct {
 	Id                  uint32 `json:"id"`
 	Headline            string `json:"headline"`
-	Access              string
-	NumberOfVisitors    uint32
-	MainCustomersSex    string // using string temporarily
-	MinMainCustomersAge uint8
-	MaxMainCustomersAge uint8
-	Price               uint32
+	Access              string `json:"access"`
+	NumberOfVisitors    uint32 `json:"number_of_visitors"`
+	MainCustomersSex    string `json:"main_customers_sex"` // using string temporarily
+	MinMainCustomersAge uint8  `json:"min_main_customers_age"`
+	MaxMainCustomersAge uint8  `json:"max_main_customers_age"`
+	Price               uint32 `json:"price"`
 }
 
 type Spaces struct {
@@ -22,18 +22,18 @@ type Spaces struct {
 }
 
 type SpaceDetail struct {
-	Id                  uint32
-	Headline            string
-	Access              string
-	NumberOfVisitors    uint32
-	MainCustomersSex    string // using string temporarily
-	MinMainCustomersAge uint8
-	MaxMainCustomersAge uint8
-	Price               uint32
-	WebsiteUrl          string
-	Coordinate          object.GeoPoint
-	Images              []*entity.SpaceImage
-	Displayers          []*entity.SpaceDisplayer
+	Id                  uint32                   `json:"id"`
+	Headline            string                   `json:"headline"`
+	Access              string                   `json:"access"`
+	NumberOfVisitors    uint32                   `json:"number_of_visitors"`
+	MainCustomersSex    string                   `json:"main_customers_sex"` // using string temporarily
+	MinMainCustomersAge uint8                    `json:"min_main_customers_age"`
+	MaxMainCustomersAge uint8                    `json:"max_main_customers_age"`
+	Price               uint32                   `json:"price"`
+	WebsiteUrl          string                   `json:"website_url"`
+	Coordinate          object.GeoPoint          `json:"coordinate"`
+	Images              []*entity.SpaceImage     `json:"images"`
+	Displayers          []*entity.SpaceDisplayer `json:"displayers"`
 }
 
 func EncodeSpaceEntities(entities []*entity.Space) ([]byte, error) {
