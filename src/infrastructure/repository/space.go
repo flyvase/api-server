@@ -36,7 +36,7 @@ func (sr *Space) List() ([]*entity.Space, error) {
 
 func (sr *Space) Fetch(id uint32) (*entity.Space, error) {
 	spacesRow, err := sr.Driver.QueryRow(
-		`select id, headline, access, number_of_visitors, main_customers_sex, min_main_customers_age, max_main_customers_age, price, website_url from spaces where id = ?`,
+		`select id, headline, access, number_of_visitors, main_customers_sex, min_main_customers_age, max_main_customers_age, price, website_url, ST_X(coordinate), ST_Y(coordinate) from spaces where id = ?`,
 		id,
 	)
 
@@ -45,7 +45,7 @@ func (sr *Space) Fetch(id uint32) (*entity.Space, error) {
 	}
 
 	var se entity.Space
-	if err := spacesRow.Scan(&se.Id, &se.Headline, &se.Access, &se.NumberOfVisitors, &se.MainCustomersSex, &se.MinMainCustomersAge, &se.MaxMainCustomersAge, &se.Price, &se.WebsiteUrl); err != nil {
+	if err := spacesRow.Scan(&se.Id, &se.Headline, &se.Access, &se.NumberOfVisitors, &se.MainCustomersSex, &se.MinMainCustomersAge, &se.MaxMainCustomersAge, &se.Price, &se.WebsiteUrl, &se.Coordinate.Lat, &se.Coordinate.Lng); err != nil {
 		return nil, err
 	}
 
