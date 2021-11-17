@@ -14,7 +14,7 @@ services:
       - 8080:8080
     volumes:
       - .:/app
-    command: /bin/ash -c "./scripts/wait_mysql.sh"
+    command: /bin/ash -c "./database/wait_mysql.sh"
     stdin_open: true
     tty: true
   mysql:
@@ -22,7 +22,8 @@ services:
       MYSQL_ROOT_PASSWORD: '&2dwn*8VSBj7WTU_'
     image: mysql:8
     volumes:
-      - ./scripts/sql:/docker-entrypoint-initdb.d
       - ./mysql/data:/var/lib/mysql
+      - ./database/init:/docker-entrypoint-initdb.d
+      - ./database/my.cnf:/etc/mysql/conf.d/my.cnf
     ports:
       - 3306:3306
