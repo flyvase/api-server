@@ -14,4 +14,6 @@ type Space struct {
 	Price            space.Price
 	WebsiteUrl       string
 	Coordinate       core.GeoPoint
+	Images           []*SpaceImage
+	Displayers       []*SpaceDisplayer
 }
