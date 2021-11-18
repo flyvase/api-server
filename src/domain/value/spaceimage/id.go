@@ -1,5 +1,5 @@
 package spaceimage
 
 type Id struct {
-	Value string
+	Value uint32
 }
