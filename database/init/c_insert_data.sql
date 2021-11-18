@@ -6,11 +6,11 @@ insert into spaces (
     owner_id,
     headline,
     access,
-    number_of_visitors,
+    weekly_visitors,
     main_customers_sex,
     min_main_customers_age,
     max_main_customers_age,
-    price,
+    daily_price,
     website_url,
     coordinate
   ) value (
