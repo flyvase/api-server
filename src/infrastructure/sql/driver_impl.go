@@ -1,9 +1,21 @@
 package sql
 
-import "database/sql"
+import (
+	"database/sql"
+	"harvest/src/config"
+)
 
 type DriverImpl struct {
 	DB *sql.DB
+}
+
+func NewDriver() *DriverImpl {
+	db, err := sql.Open("mysql", config.GetDbUri())
+	if err != nil {
+		panic(err)
+	}
+
+	return &DriverImpl{DB: db}
 }
 
 func (d *DriverImpl) Exec(query string, args ...interface{}) error {
