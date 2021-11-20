@@ -8,7 +8,7 @@ import (
 type Space struct {
 	Id               space.Id
 	Headline         string
-	Access           core.Access
+	Access           string
 	NumberOfVisitors space.NumberOfVisitors
 	CustomerSegment  space.CustomerSegment
 	Price            space.Price

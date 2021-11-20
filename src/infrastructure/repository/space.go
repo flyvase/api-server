@@ -49,9 +49,7 @@ func (r *listResult) toSpaceModel() *model.Space {
 			Value: r.Id,
 		},
 		Headline: r.Headline,
-		Access: core.Access{
-			Value: r.Access,
-		},
+		Access:   r.Access,
 		NumberOfVisitors: space.NumberOfVisitors{
 			Visitors: uint(r.WeeklyVisitors),
 			Duration: constants.WeekDuration(),
