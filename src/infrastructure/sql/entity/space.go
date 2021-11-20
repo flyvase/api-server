@@ -1,7 +1,7 @@
 package entity
 
 type Space struct {
-	SpaceId             uint32
+	Id                  uint32
 	Headline            string
 	Access              string
 	WeeklyVisitors      uint32
