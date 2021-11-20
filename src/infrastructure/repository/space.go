@@ -4,11 +4,10 @@ import (
 	"encoding/json"
 	"harvest/src/core/constants"
 	"harvest/src/domain/model"
-	"harvest/src/domain/value/core"
-	"harvest/src/domain/value/space"
-	"harvest/src/domain/value/spaceimage"
-	entity "harvest/src/infrastructure/entity/space"
+	"harvest/src/domain/value"
+	"harvest/src/infrastructure/entity"
 	"harvest/src/infrastructure/sql"
+	"strconv"
 )
 
 type image struct {
@@ -18,8 +17,8 @@ type image struct {
 
 func (i *image) toSpaceImageModel() *model.SpaceImage {
 	return &model.SpaceImage{
-		Id: spaceimage.Id{
-			Value: i.Id,
+		Id: value.SpaceImageId{
+			Value: uint(i.Id),
 		},
 		ImageUrl: i.ImageUrl,
 	}
@@ -44,22 +43,28 @@ func (r *listResult) toSpaceModel() *model.Space {
 		imageModels = append(imageModels, i.toSpaceImageModel())
 	}
 
+	c, err := strconv.Atoi(r.MainCustomersSex)
+	if err != nil {
+		panic(err)
+	}
+	sexCode := uint8(c)
+
 	return &model.Space{
-		Id: space.Id{
-			Value: r.Id,
+		Id: value.SpaceId{
+			Value: uint(r.Id),
 		},
 		Headline: r.Headline,
 		Access:   r.Access,
-		NumberOfVisitors: space.NumberOfVisitors{
+		NumberOfVisitors: value.NumberOfVisitors{
 			Visitors: uint(r.WeeklyVisitors),
 			Duration: constants.WeekDuration(),
 		},
-		CustomerSegment: space.CustomerSegment{
-			Sex:    core.SexFromString(r.MainCustomersSex),
+		CustomerSegment: value.CustomerSegment{
+			Sex:    value.NewSex(sexCode),
 			MinAge: r.MinMainCustomersAge,
 			MaxAge: r.MaxMainCustomersAge,
 		},
-		Price: space.Price{
+		Price: value.Price{
 			Value:    uint(r.DailyPrice),
 			Duration: constants.DayDuration(),
 		},

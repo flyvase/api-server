@@ -1,9 +1,9 @@
 package model
 
-import "harvest/src/domain/value/spacedisplayer"
+import "harvest/src/domain/value"
 
 type SpaceDisplayer struct {
-	Id          spacedisplayer.Id
+	Id          value.SpaceDisplayerId
 	ImageUrl    string
 	Description string
 }

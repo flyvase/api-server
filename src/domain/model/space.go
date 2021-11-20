@@ -1,19 +1,18 @@
 package model
 
 import (
-	"harvest/src/domain/value/core"
-	"harvest/src/domain/value/space"
+	"harvest/src/domain/value"
 )
 
 type Space struct {
-	Id               space.Id
+	Id               value.SpaceId
 	Headline         string
 	Access           string
-	NumberOfVisitors space.NumberOfVisitors
-	CustomerSegment  space.CustomerSegment
-	Price            space.Price
+	NumberOfVisitors value.NumberOfVisitors
+	CustomerSegment  value.CustomerSegment
+	Price            value.Price
 	WebsiteUrl       string
-	Coordinate       core.GeoPoint
+	Coordinate       value.GeoPoint
 	Images           []*SpaceImage
 	Displayers       []*SpaceDisplayer
 }

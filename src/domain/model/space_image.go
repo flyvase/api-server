@@ -1,8 +1,10 @@
 package model
 
-import "harvest/src/domain/value/spaceimage"
+import (
+	"harvest/src/domain/value"
+)
 
 type SpaceImage struct {
-	Id       spaceimage.Id
+	Id       value.SpaceImageId
 	ImageUrl string
 }
