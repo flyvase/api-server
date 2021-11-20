@@ -7,8 +7,8 @@ import (
 	"harvest/src/domain/value/core"
 	"harvest/src/domain/value/space"
 	"harvest/src/domain/value/spaceimage"
+	entity "harvest/src/infrastructure/entity/space"
 	"harvest/src/infrastructure/sql"
-	"harvest/src/infrastructure/sql/entity"
 )
 
 type image struct {
@@ -98,7 +98,7 @@ func (s *Space) List() ([]*model.Space, error) {
 	var results []*listResult
 	for spacesRows.Next() {
 		var result listResult
-		spacesRows.Scan(
+		if err := spacesRows.Scan(
 			&result.Id,
 			&result.Headline,
 			&result.Access,
@@ -108,7 +108,9 @@ func (s *Space) List() ([]*model.Space, error) {
 			&result.MaxMainCustomersAge,
 			&result.DailyPrice,
 			&result.ImagesJson,
-		)
+		); err != nil {
+			return nil, err
+		}
 
 		results = append(results, &result)
 	}
