@@ -3,6 +3,7 @@ package sql
 import (
 	"database/sql"
 	"harvest/src/config"
+	"time"
 )
 
 type DriverImpl struct {
@@ -14,6 +15,11 @@ func NewDriver() *DriverImpl {
 	if err != nil {
 		panic(err)
 	}
+
+	// https://www.alexedwards.net/blog/configuring-sqldb
+	db.SetMaxOpenConns(25)
+	db.SetMaxIdleConns(25)
+	db.SetConnMaxLifetime(5 * time.Minute)
 
 	return &DriverImpl{DB: db}
 }
