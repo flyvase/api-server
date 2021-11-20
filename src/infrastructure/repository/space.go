@@ -125,3 +125,172 @@ func (s *Space) List() ([]*model.Space, error) {
 
 	return spaceModels, nil
 }
+
+type getSpaceResult struct {
+	Value *entity.Space
+	Error error
+}
+
+func (s *Space) getSpace(id value.SpaceId, c chan *getSpaceResult) {
+	spaceRow := s.SqlDriver.QueryRow(`
+		select
+		id,
+		headline,
+		access,
+		weekly_visitors,
+		main_customers_sex,
+		min_main_customers_age,
+		max_main_customers_age,
+		daily_price,
+		website_url,
+		ST_Latitude(coordinate),
+		ST_Longitude(coordinate)
+		from spaces
+		where id = ?
+	`, id.Value)
+
+	var spaceEntity entity.Space
+	if err := spaceRow.Scan(
+		&spaceEntity.Id,
+		&spaceEntity.Headline,
+		&spaceEntity.Access,
+		&spaceEntity.WeeklyVisitors,
+		&spaceEntity.MainCustomersSex,
+		&spaceEntity.MinMainCustomersAge,
+		&spaceEntity.MaxMainCustomersAge,
+		&spaceEntity.DailyPrice,
+		&spaceEntity.WebsiteUrl,
+		&spaceEntity.Latitude,
+		&spaceEntity.Longitude,
+	); err != nil {
+		c <- &getSpaceResult{
+			Value: nil,
+			Error: err,
+		}
+	}
+
+	c <- &getSpaceResult{
+		Value: &spaceEntity,
+		Error: nil,
+	}
+}
+
+type getSpaceImagesResult struct {
+	Value []*entity.SpaceImage
+	Error error
+}
+
+func (s *Space) getSpaceImages(id value.SpaceId, c chan *getSpaceImagesResult) {
+	spaceImagesRows, err := s.SqlDriver.Query(`
+		select
+		id,
+		image_url
+		from space_images
+		where space_id = ?
+	`, id.Value)
+	if err != nil {
+		c <- &getSpaceImagesResult{
+			Value: nil,
+			Error: err,
+		}
+	}
+
+	defer spaceImagesRows.Close()
+
+	var spaceImageEntities []*entity.SpaceImage
+	for spaceImagesRows.Next() {
+		var spaceImageEntity entity.SpaceImage
+		if err := spaceImagesRows.Scan(
+			&spaceImageEntity.Id,
+			&spaceImageEntity.ImageUrl,
+		); err != nil {
+			c <- &getSpaceImagesResult{
+				Value: nil,
+				Error: err,
+			}
+		}
+
+		spaceImageEntities = append(spaceImageEntities, &spaceImageEntity)
+	}
+
+	c <- &getSpaceImagesResult{
+		Value: spaceImageEntities,
+		Error: nil,
+	}
+}
+
+type getSpaceDisplayersResult struct {
+	Value []*entity.SpaceDisplayer
+	Error error
+}
+
+func (s *Space) getSpaceDisplayers(id value.SpaceId, c chan *getSpaceDisplayersResult) {
+	spaceDisplayersRows, err := s.SqlDriver.Query(`
+		select
+		id,
+		image_url,
+		description
+		from space_displayers
+		where space_id = ?
+	`, id.Value)
+	if err != nil {
+		c <- &getSpaceDisplayersResult{
+			Value: nil,
+			Error: err,
+		}
+	}
+
+	defer spaceDisplayersRows.Close()
+
+	var spaceDisplayerEntities []*entity.SpaceDisplayer
+	for spaceDisplayersRows.Next() {
+		var spaceDisplayerEntity entity.SpaceDisplayer
+		if err := spaceDisplayersRows.Scan(
+			&spaceDisplayerEntity.Id,
+			&spaceDisplayerEntity.ImageUrl,
+			&spaceDisplayerEntity.Description,
+		); err != nil {
+			c <- &getSpaceDisplayersResult{
+				Value: nil,
+				Error: err,
+			}
+		}
+
+		spaceDisplayerEntities = append(spaceDisplayerEntities, &spaceDisplayerEntity)
+	}
+
+	c <- &getSpaceDisplayersResult{
+		Value: spaceDisplayerEntities,
+		Error: nil,
+	}
+}
+
+func (s *Space) Fetch(id value.SpaceId) (*model.Space, error) {
+	spaceChannel := make(chan *getSpaceResult)
+	spaceImagesChannel := make(chan *getSpaceImagesResult)
+	spaceDisplayersChannel := make(chan *getSpaceDisplayersResult)
+
+	go s.getSpace(id, spaceChannel)
+	go s.getSpaceImages(id, spaceImagesChannel)
+	go s.getSpaceDisplayers(id, spaceDisplayersChannel)
+
+	getSpaceResult := <-spaceChannel
+	if getSpaceResult.Error != nil {
+		return nil, getSpaceResult.Error
+	}
+
+	getSpaceImagesResult := <-spaceImagesChannel
+	if getSpaceImagesResult.Error != nil {
+		return nil, getSpaceImagesResult.Error
+	}
+
+	getSpaceDisplayersResult := <-spaceDisplayersChannel
+	if getSpaceDisplayersResult.Error != nil {
+		return nil, getSpaceDisplayersResult.Error
+	}
+
+	return getSpaceResult.Value.ToSpaceModel(
+		getSpaceImagesResult.Value,
+		getSpaceDisplayersResult.Value,
+	), nil
+}
