@@ -9,7 +9,3 @@ type RowImpl struct {
 func (r *RowImpl) Scan(args ...interface{}) error {
 	return r.Result.Scan(args...)
 }
-
-func (r *RowImpl) Err() error {
-	return r.Result.Err()
-}
