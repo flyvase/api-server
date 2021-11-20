@@ -24,7 +24,7 @@ insert into spaces (
     30,
     3000,
     'https://coffee-story.co.jp/',
-    Point(35.7516667, 139.7307955)
+    ST_PointFromText('Point(35.7516667 139.7307955)', 4326)
   );
 
 insert into space_images (space_id, image_url) value (
@@ -84,7 +84,7 @@ insert into spaces (
     30,
     4000,
     'https://www.instagram.com/lotus_omotesando/?hl=ja',
-    Point(35.6684671, 139.7100234)
+    ST_PointFromText('Point(35.6684671 139.7100234)', 4326)
   );
 
 insert into space_images (space_id, image_url) value (
@@ -144,7 +144,7 @@ insert into spaces (
     40,
     30000,
     'https://hoshinoya.com/tokyo/',
-    Point(35.6877316, 139.7628476)
+    ST_PointFromText('Point(35.6877316 139.7628476)', 4326)
   );
 
 insert into space_images (space_id, image_url) value (

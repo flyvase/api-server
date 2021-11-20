@@ -29,7 +29,7 @@ create table spaces (
   max_main_customers_age tinyint unsigned,
   daily_price int unsigned,
   website_url text,
-  coordinate point,
+  coordinate point srid 4326,
   created_at datetime not null default current_timestamp,
   updated_at datetime not null default current_timestamp on update current_timestamp,
   deleted_at datetime
