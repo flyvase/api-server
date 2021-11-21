@@ -33,9 +33,15 @@ func (d *DriverImpl) Exec(query string, args ...interface{}) error {
 }
 
 func (d *DriverImpl) Query(query string, args ...interface{}) (gateway.Rows, error) {
-	return d.DB.Query(query, args...)
+	rows, err := d.DB.Query(query, args...)
+	return &rowsImpl{
+		Result: rows,
+	}, err
 }
 
 func (d *DriverImpl) QueryRow(query string, args ...interface{}) gateway.Row {
-	return d.DB.QueryRow(query, args...)
+	row := d.DB.QueryRow(query, args...)
+	return &rowImpl{
+		Result: row,
+	}
 }

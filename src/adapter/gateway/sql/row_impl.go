@@ -2,10 +2,10 @@ package sql
 
 import "database/sql"
 
-type RowImpl struct {
+type rowImpl struct {
 	Result *sql.Row
 }
 
-func (r *RowImpl) Scan(args ...interface{}) error {
+func (r *rowImpl) Scan(args ...interface{}) error {
 	return r.Result.Scan(args...)
 }
