@@ -20,14 +20,22 @@ func main() {
 	spaceRepository := repository.SpaceImpl{
 		SqlDriver: sqlDriver,
 	}
-	spaceUsecase := interactor.Space{
+	spaceInteractor := interactor.Space{
 		SpaceRepository: &spaceRepository,
 	}
 
 	mux := mux.NewRouter()
-	mux.Handle("/spaces/", middleware.Logger(
-		handler.SpacesGet(&spaceUsecase),
-	)).Methods("GET")
+	mux.Handle(
+		"/spaces/",
+		middleware.Logger(
+			handler.SpacesGet(&spaceInteractor),
+		),
+	).Methods("GET")
+	mux.Handle("/spaces/{space_id:[0-9]{1,10}}",
+		handler.SpaceDetailsGet(
+			&spaceInteractor,
+		),
+	).Methods("GET")
 
 	c := cors.New(
 		cors.Options{
