@@ -65,7 +65,7 @@ func (r *listResult) toSpaceModel() *model.Space {
 			MaxAge: r.MaxMainCustomersAge,
 		},
 		Price: value.Price{
-			Value:    uint(r.DailyPrice),
+			Price:    uint(r.DailyPrice),
 			Duration: constants.DayDuration(),
 		},
 		Images: imageModels,

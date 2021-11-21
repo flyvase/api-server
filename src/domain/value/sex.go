@@ -1,6 +1,9 @@
 package value
 
-import "harvest/src/core/slice"
+import (
+	"harvest/src/core/slice"
+	"strconv"
+)
 
 // based on ISO5218
 type Sex struct {
@@ -17,4 +20,8 @@ func NewSex(code uint8) Sex {
 	return Sex{
 		Code: code,
 	}
+}
+
+func (s *Sex) ToString() string {
+	return strconv.Itoa(int(s.Code))
 }

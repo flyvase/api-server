@@ -3,6 +3,6 @@ package value
 import "time"
 
 type Price struct {
-	Value    uint
+	Price    uint
 	Duration time.Duration
 }

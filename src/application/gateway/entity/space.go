@@ -56,7 +56,7 @@ func (s *Space) ToSpaceModel(imageEntities []*SpaceImage, displayerEntities []*S
 			MaxAge: s.MaxMainCustomersAge,
 		},
 		Price: value.Price{
-			Value:    uint(s.DailyPrice),
+			Price:    uint(s.DailyPrice),
 			Duration: constants.DayDuration(),
 		},
 		WebsiteUrl: s.WebsiteUrl,

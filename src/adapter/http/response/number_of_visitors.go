@@ -1,0 +1,15 @@
+package response
+
+import "harvest/src/domain/value"
+
+type numberOfVisitors struct {
+	Visitors uint  `json:"visitors"`
+	Duration int64 `json:"duration"`
+}
+
+func numberOfVisitorsFromValue(n *value.NumberOfVisitors) *numberOfVisitors {
+	return &numberOfVisitors{
+		Visitors: n.Visitors,
+		Duration: n.Duration.Milliseconds(),
+	}
+}

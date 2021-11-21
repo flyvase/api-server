@@ -5,6 +5,8 @@ import (
 	gateway "harvest/src/application/gateway/sql"
 	"harvest/src/config"
 	"time"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type DriverImpl struct {
