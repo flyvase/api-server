@@ -4,4 +4,4 @@ import "os"
 
 var Mode = os.Getenv("MODE")
 
-var Environment = os.Getenv("Environment")
+var Environment = os.Getenv("ENVIRONMENT")

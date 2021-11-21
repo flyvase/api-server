@@ -3,6 +3,7 @@ package middleware
 import (
 	"fmt"
 	"harvest/src/config"
+	"log"
 	"net/http"
 	"time"
 )
@@ -19,7 +20,7 @@ func Logger(next http.Handler) http.Handler {
 				r.Proto,
 				r.URL.Path,
 			)
-			fmt.Println(msg)
+			log.Println(msg)
 		}
 
 		next.ServeHTTP(rw, r)
