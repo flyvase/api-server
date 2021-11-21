@@ -2,11 +2,11 @@ package repository
 
 import (
 	"encoding/json"
+	"harvest/src/application/gateway/entity"
+	"harvest/src/application/gateway/sql"
 	"harvest/src/core/constants"
 	"harvest/src/domain/model"
 	"harvest/src/domain/value"
-	"harvest/src/infrastructure/entity"
-	"harvest/src/infrastructure/sql"
 	"strconv"
 )
 
@@ -72,11 +72,11 @@ func (r *listResult) toSpaceModel() *model.Space {
 	}
 }
 
-type Space struct {
+type SpaceImpl struct {
 	SqlDriver sql.Driver
 }
 
-func (s *Space) List() ([]*model.Space, error) {
+func (s *SpaceImpl) List() ([]*model.Space, error) {
 	spacesRows, err := s.SqlDriver.Query(`
 		select
 		spaces.id,
@@ -131,7 +131,7 @@ type getSpaceResult struct {
 	Error error
 }
 
-func (s *Space) getSpace(id value.SpaceId, c chan *getSpaceResult) {
+func (s *SpaceImpl) getSpace(id value.SpaceId, c chan *getSpaceResult) {
 	spaceRow := s.SqlDriver.QueryRow(`
 		select
 		id,
@@ -180,7 +180,7 @@ type getSpaceImagesResult struct {
 	Error error
 }
 
-func (s *Space) getSpaceImages(id value.SpaceId, c chan *getSpaceImagesResult) {
+func (s *SpaceImpl) getSpaceImages(id value.SpaceId, c chan *getSpaceImagesResult) {
 	spaceImagesRows, err := s.SqlDriver.Query(`
 		select
 		id,
@@ -224,7 +224,7 @@ type getSpaceDisplayersResult struct {
 	Error error
 }
 
-func (s *Space) getSpaceDisplayers(id value.SpaceId, c chan *getSpaceDisplayersResult) {
+func (s *SpaceImpl) getSpaceDisplayers(id value.SpaceId, c chan *getSpaceDisplayersResult) {
 	spaceDisplayersRows, err := s.SqlDriver.Query(`
 		select
 		id,
@@ -265,7 +265,7 @@ func (s *Space) getSpaceDisplayers(id value.SpaceId, c chan *getSpaceDisplayersR
 	}
 }
 
-func (s *Space) Fetch(id value.SpaceId) (*model.Space, error) {
+func (s *SpaceImpl) Fetch(id value.SpaceId) (*model.Space, error) {
 	spaceChannel := make(chan *getSpaceResult)
 	spaceImagesChannel := make(chan *getSpaceImagesResult)
 	spaceDisplayersChannel := make(chan *getSpaceDisplayersResult)
