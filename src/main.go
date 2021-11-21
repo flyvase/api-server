@@ -5,7 +5,6 @@ import (
 	"harvest/src/adapter/gateway/sql"
 	"harvest/src/adapter/http/handler"
 	"harvest/src/adapter/http/middleware"
-	"harvest/src/application/interactor"
 	"harvest/src/application/repository"
 	"harvest/src/config"
 	"net/http"
@@ -20,20 +19,17 @@ func main() {
 	spaceRepository := repository.SpaceImpl{
 		SqlDriver: sqlDriver,
 	}
-	spaceInteractor := interactor.Space{
-		SpaceRepository: &spaceRepository,
-	}
 
 	mux := mux.NewRouter()
 	mux.Handle(
 		"/spaces/",
 		middleware.Logger(
-			handler.SpacesGet(&spaceInteractor),
+			handler.SpacesGet(&spaceRepository),
 		),
 	).Methods("GET")
 	mux.Handle("/spaces/{space_id:[0-9]{1,10}}",
 		handler.SpaceDetailsGet(
-			&spaceInteractor,
+			&spaceRepository,
 		),
 	).Methods("GET")
 

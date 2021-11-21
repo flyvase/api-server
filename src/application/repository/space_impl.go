@@ -29,14 +29,14 @@ type listResult struct {
 	ImagesJson []byte
 }
 
-func (r *listResult) getImages() []*image {
+func (r *listResult) decodeImages() []*image {
 	var images []*image
 	json.Unmarshal(r.ImagesJson, &images)
 	return images
 }
 
 func (r *listResult) toSpaceModel() *model.Space {
-	images := r.getImages()
+	images := r.decodeImages()
 
 	var imageModels []*model.SpaceImage
 	for _, i := range images {

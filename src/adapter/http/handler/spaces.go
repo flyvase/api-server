@@ -2,13 +2,13 @@ package handler
 
 import (
 	"harvest/src/adapter/http/response"
-	"harvest/src/application/usecase"
+	"harvest/src/domain/repository"
 	"net/http"
 )
 
-func SpacesGet(spaceInteractor usecase.Space) http.Handler {
+func SpacesGet(spaceRepository repository.Space) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
-		spaceModels, _ := spaceInteractor.List()
+		spaceModels, _ := spaceRepository.List()
 
 		json, _ := response.EncodeSpaceModels(spaceModels)
 

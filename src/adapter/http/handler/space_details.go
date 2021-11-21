@@ -2,7 +2,7 @@ package handler
 
 import (
 	"harvest/src/adapter/http/response"
-	"harvest/src/application/usecase"
+	"harvest/src/domain/repository"
 	"harvest/src/domain/value"
 	"net/http"
 	"strconv"
@@ -10,7 +10,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func SpaceDetailsGet(spaceInteractor usecase.Space) http.Handler {
+func SpaceDetailsGet(spaceRepository repository.Space) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		id, err := strconv.ParseUint(vars["space_id"], 10, 32)
@@ -19,7 +19,7 @@ func SpaceDetailsGet(spaceInteractor usecase.Space) http.Handler {
 			return
 		}
 
-		spaceModel, _ := spaceInteractor.Fetch(
+		spaceModel, _ := spaceRepository.Fetch(
 			value.SpaceId{
 				Value: uint(id),
 			},
