@@ -6,6 +6,6 @@ import (
 )
 
 type Space interface {
-	Fetch(value.SpaceId) (*model.Space, error)
 	List() ([]*model.Space, error)
+	Fetch(value.SpaceId) (*model.Space, error)
 }
