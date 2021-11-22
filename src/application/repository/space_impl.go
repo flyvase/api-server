@@ -5,6 +5,7 @@ import (
 	"harvest/src/application/gateway/entity"
 	"harvest/src/application/gateway/sql"
 	"harvest/src/core/constant"
+	"harvest/src/core/errors"
 	"harvest/src/domain/model"
 	"harvest/src/domain/value"
 	"strconv"
@@ -29,9 +30,22 @@ type listResult struct {
 	ImagesJson []byte
 }
 
+func isEmptyImages(images []*image) bool {
+	if len(images) == 1 && images[0].Id == 0 && images[0].ImageUrl == "" {
+		return true
+	}
+
+	return false
+}
+
 func (r *listResult) decodeImages() []*image {
 	var images []*image
 	json.Unmarshal(r.ImagesJson, &images)
+
+	if isEmptyImages(images) {
+		return nil
+	}
+
 	return images
 }
 
@@ -89,7 +103,7 @@ func (s *SpaceImpl) List() ([]*model.Space, error) {
 		spaces.daily_price,
 		json_arrayagg(json_object("id", space_images.id, "image_url", space_images.image_url))
 		from spaces
-		inner join space_images on spaces.id = space_images.space_id
+		left join space_images on spaces.id = space_images.space_id
 		group by spaces.id
 	`)
 	if err != nil {
@@ -126,12 +140,7 @@ func (s *SpaceImpl) List() ([]*model.Space, error) {
 	return spaceModels, nil
 }
 
-type getSpaceResult struct {
-	Value *entity.Space
-	Error error
-}
-
-func (s *SpaceImpl) getSpace(id value.SpaceId, c chan *getSpaceResult) {
+func (s *SpaceImpl) getSpace(id value.SpaceId) (*entity.Space, error) {
 	spaceRow := s.SqlDriver.QueryRow(`
 		select
 		id,
@@ -163,16 +172,10 @@ func (s *SpaceImpl) getSpace(id value.SpaceId, c chan *getSpaceResult) {
 		&spaceEntity.Latitude,
 		&spaceEntity.Longitude,
 	); err != nil {
-		c <- &getSpaceResult{
-			Value: nil,
-			Error: err,
-		}
+		return nil, err
 	}
 
-	c <- &getSpaceResult{
-		Value: &spaceEntity,
-		Error: nil,
-	}
+	return &spaceEntity, nil
 }
 
 type getSpaceImagesResult struct {
@@ -266,18 +269,20 @@ func (s *SpaceImpl) getSpaceDisplayers(id value.SpaceId, c chan *getSpaceDisplay
 }
 
 func (s *SpaceImpl) Fetch(id value.SpaceId) (*model.Space, error) {
-	spaceChannel := make(chan *getSpaceResult)
+	spaceEntity, err := s.getSpace(id)
+	if err != nil {
+		if err == errors.ErrSqlNoRows {
+			return nil, nil
+		}
+
+		return nil, err
+	}
+
 	spaceImagesChannel := make(chan *getSpaceImagesResult)
 	spaceDisplayersChannel := make(chan *getSpaceDisplayersResult)
 
-	go s.getSpace(id, spaceChannel)
 	go s.getSpaceImages(id, spaceImagesChannel)
 	go s.getSpaceDisplayers(id, spaceDisplayersChannel)
-
-	getSpaceResult := <-spaceChannel
-	if getSpaceResult.Error != nil {
-		return nil, getSpaceResult.Error
-	}
 
 	getSpaceImagesResult := <-spaceImagesChannel
 	if getSpaceImagesResult.Error != nil {
@@ -289,7 +294,7 @@ func (s *SpaceImpl) Fetch(id value.SpaceId) (*model.Space, error) {
 		return nil, getSpaceDisplayersResult.Error
 	}
 
-	return getSpaceResult.Value.ToSpaceModel(
+	return spaceEntity.ToSpaceModel(
 		getSpaceImagesResult.Value,
 		getSpaceDisplayersResult.Value,
 	), nil
