@@ -52,6 +52,10 @@ func EncodeSpaceModels(spaceModels []*model.Space) ([]byte, error) {
 		list = append(list, spaceFromModel(sm))
 	}
 
+	if list == nil {
+		list = []*space{}
+	}
+
 	spaces := &spaces{
 		List: list,
 	}
