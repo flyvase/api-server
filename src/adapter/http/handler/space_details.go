@@ -2,6 +2,7 @@ package handler
 
 import (
 	"harvest/src/adapter/http/response"
+	"harvest/src/core/errors"
 	"harvest/src/domain/repository"
 	"harvest/src/domain/value"
 	"net/http"
@@ -19,13 +20,36 @@ func SpaceDetailsGet(spaceRepository repository.Space) http.Handler {
 			return
 		}
 
-		spaceModel, _ := spaceRepository.Fetch(
+		spaceModel, err := spaceRepository.Fetch(
 			value.SpaceId{
 				Value: uint(id),
 			},
 		)
+		if err != nil {
+			switch err.(type) {
+			case *errors.Unexpected:
+				{
+					http.Error(rw, "Unexpected error", http.StatusInternalServerError)
+					return
+				}
+			default:
+				{
+					http.Error(rw, "Data source unavailable", http.StatusInternalServerError)
+					return
+				}
+			}
+		}
 
-		json, _ := response.EncodeSpaceModel(spaceModel)
+		if spaceModel == nil {
+			http.Error(rw, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+			return
+		}
+
+		json, err := response.EncodeSpaceModel(spaceModel)
+		if err != nil {
+			http.Error(rw, "Failed to encode resources", http.StatusInternalServerError)
+			return
+		}
 
 		respond(rw, http.StatusOK, json)
 	})
