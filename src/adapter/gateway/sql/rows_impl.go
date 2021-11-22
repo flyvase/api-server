@@ -1,13 +1,18 @@
 package sql
 
-import "database/sql"
+import (
+	"database/sql"
+	"harvest/src/core/errors"
+)
 
 type rowsImpl struct {
 	Result *sql.Rows
 }
 
-func (r *rowsImpl) Close() error {
-	return r.Result.Close()
+func (r *rowsImpl) Close() {
+	if err := r.Result.Close(); err != nil {
+		panic(err)
+	}
 }
 
 func (r *rowsImpl) Next() bool {
@@ -15,5 +20,11 @@ func (r *rowsImpl) Next() bool {
 }
 
 func (r *rowsImpl) Scan(args ...interface{}) error {
-	return r.Result.Scan(args...)
+	if err := r.Result.Scan(args...); err != nil {
+		return &errors.Unexpected{
+			Message: err.Error(),
+		}
+	}
+
+	return nil
 }

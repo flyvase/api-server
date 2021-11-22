@@ -1,7 +1,7 @@
 package sql
 
 type Rows interface {
-	Close() error
+	Close()
 	Next() bool
 	Scan(...interface{}) error
 }
