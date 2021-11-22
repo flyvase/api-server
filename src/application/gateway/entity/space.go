@@ -1,7 +1,7 @@
 package entity
 
 import (
-	"harvest/src/core/constants"
+	"harvest/src/core/constant"
 	"harvest/src/domain/model"
 	"harvest/src/domain/value"
 	"strconv"
@@ -46,7 +46,7 @@ func (s *Space) ToSpaceModel(imageEntities []*SpaceImage, displayerEntities []*S
 		Access:   s.Access,
 		NumberOfVisitors: value.NumberOfVisitors{
 			Visitors: uint(s.WeeklyVisitors),
-			Duration: constants.WeekDuration(),
+			Duration: constant.WeekDuration(),
 		},
 		CustomerSegment: value.CustomerSegment{
 			Sex: value.Sex{
@@ -57,7 +57,7 @@ func (s *Space) ToSpaceModel(imageEntities []*SpaceImage, displayerEntities []*S
 		},
 		Price: value.Price{
 			Price:    uint(s.DailyPrice),
-			Duration: constants.DayDuration(),
+			Duration: constant.DayDuration(),
 		},
 		WebsiteUrl: s.WebsiteUrl,
 		Coordinate: value.GeoPoint{

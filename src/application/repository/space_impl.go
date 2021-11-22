@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"harvest/src/application/gateway/entity"
 	"harvest/src/application/gateway/sql"
-	"harvest/src/core/constants"
+	"harvest/src/core/constant"
 	"harvest/src/domain/model"
 	"harvest/src/domain/value"
 	"strconv"
@@ -57,7 +57,7 @@ func (r *listResult) toSpaceModel() *model.Space {
 		Access:   r.Access,
 		NumberOfVisitors: value.NumberOfVisitors{
 			Visitors: uint(r.WeeklyVisitors),
-			Duration: constants.WeekDuration(),
+			Duration: constant.WeekDuration(),
 		},
 		CustomerSegment: value.CustomerSegment{
 			Sex:    value.NewSex(sexCode),
@@ -66,7 +66,7 @@ func (r *listResult) toSpaceModel() *model.Space {
 		},
 		Price: value.Price{
 			Price:    uint(r.DailyPrice),
-			Duration: constants.DayDuration(),
+			Duration: constant.DayDuration(),
 		},
 		Images: imageModels,
 	}
