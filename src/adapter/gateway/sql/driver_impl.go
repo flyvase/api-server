@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	gateway "harvest/src/application/gateway/sql"
 	"harvest/src/config"
+	"harvest/src/core/errors"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -29,14 +30,34 @@ func NewDriver() *DriverImpl {
 
 func (d *DriverImpl) Exec(query string, args ...interface{}) error {
 	_, err := d.DB.Exec(query, args...)
-	return err
+	if err != nil {
+		if err == sql.ErrConnDone {
+			return errors.ErrSqlConnClosed
+		}
+
+		return &errors.Unexpected{
+			Message: err.Error(),
+		}
+	}
+
+	return nil
 }
 
 func (d *DriverImpl) Query(query string, args ...interface{}) (gateway.Rows, error) {
 	rows, err := d.DB.Query(query, args...)
+	if err != nil {
+		if err == sql.ErrConnDone {
+			return nil, errors.ErrSqlConnClosed
+		}
+
+		return nil, &errors.Unexpected{
+			Message: err.Error(),
+		}
+	}
+
 	return &rowsImpl{
 		Result: rows,
-	}, err
+	}, nil
 }
 
 func (d *DriverImpl) QueryRow(query string, args ...interface{}) gateway.Row {
