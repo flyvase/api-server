@@ -21,6 +21,10 @@ func spaceFromModel(s *model.Space) *space {
 		images = append(images, spaceImageFromModel(i))
 	}
 
+	if images == nil {
+		images = []*spaceImage{}
+	}
+
 	return &space{
 		Id:       uint32(s.Id.Value),
 		Headline: s.Headline,

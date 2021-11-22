@@ -24,9 +24,17 @@ func spaceDetailsFromModel(s *model.Space) *spaceDetails {
 		images = append(images, spaceImageFromModel(i))
 	}
 
+	if images == nil {
+		images = []*spaceImage{}
+	}
+
 	var displayers []*spaceDisplayer
 	for _, d := range s.Displayers {
 		displayers = append(displayers, spaceDisplayerFromModel(d))
+	}
+
+	if displayers == nil {
+		displayers = []*spaceDisplayer{}
 	}
 
 	return &spaceDetails{
