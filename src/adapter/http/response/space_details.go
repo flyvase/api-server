@@ -55,7 +55,5 @@ func spaceDetailsFromModel(s *model.Space) *spaceDetails {
 func EncodeSpaceModel(spaceModel *model.Space) ([]byte, error) {
 	details := spaceDetailsFromModel(spaceModel)
 
-	json, _ := json.Marshal(details)
-
-	return json, nil
+	return json.Marshal(details)
 }

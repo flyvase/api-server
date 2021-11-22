@@ -52,7 +52,5 @@ func EncodeSpaceModels(spaceModels []*model.Space) ([]byte, error) {
 		List: list,
 	}
 
-	json, _ := json.Marshal(spaces)
-
-	return json, nil
+	return json.Marshal(spaces)
 }
