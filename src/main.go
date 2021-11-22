@@ -1,12 +1,13 @@
 package main
 
 import (
-	"fmt"
+	"harvest/src/adapter/gateway/firebase"
 	"harvest/src/adapter/gateway/sql"
 	"harvest/src/adapter/http/handler"
 	"harvest/src/adapter/http/middleware"
 	"harvest/src/application/repository"
 	"harvest/src/config"
+	"log"
 	"net/http"
 	"os"
 
@@ -15,21 +16,39 @@ import (
 )
 
 func main() {
+	log.SetFlags(0)
+
 	sqlDriver := sql.NewDriver()
+	firebaseApp := firebase.InitializeApp()
+	firebaseAuth := firebase.InitializeAuth(firebaseApp)
+	firebaseAuthImpl := firebase.AuthImpl{
+		Client: firebaseAuth,
+	}
+	authRepository := repository.AuthImpl{
+		Client: &firebaseAuthImpl,
+	}
 	spaceRepository := repository.SpaceImpl{
 		SqlDriver: sqlDriver,
 	}
 
 	mux := mux.NewRouter()
+
 	mux.Handle(
 		"/spaces/",
-		middleware.Logger(
-			handler.SpacesGet(&spaceRepository),
+		middleware.Defaults(
+			&authRepository,
+			handler.SpacesGet(
+				&spaceRepository,
+			),
 		),
 	).Methods("GET")
+
 	mux.Handle("/spaces/{space_id:[0-9]{1,10}}",
-		handler.SpaceDetailsGet(
-			&spaceRepository,
+		middleware.Defaults(
+			&authRepository,
+			handler.SpaceDetailsGet(
+				&spaceRepository,
+			),
 		),
 	).Methods("GET")
 
@@ -47,7 +66,7 @@ func main() {
 	}
 
 	if config.Mode == "debug" {
-		fmt.Println("Starting web server")
+		log.Println("Starting web server")
 	}
 	if err := http.ListenAndServe(":"+port, c.Handler(mux)); err != nil {
 		panic(err)
