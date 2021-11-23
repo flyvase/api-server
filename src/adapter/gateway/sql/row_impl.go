@@ -16,7 +16,7 @@ func (r *rowImpl) Scan(args ...interface{}) error {
 			return errors.ErrSqlNoRows
 		}
 
-		return &errors.Unexpected{
+		return errors.Unexpected{
 			Message: err.Error(),
 		}
 	}

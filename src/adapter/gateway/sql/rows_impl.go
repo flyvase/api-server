@@ -21,7 +21,7 @@ func (r *rowsImpl) Next() bool {
 
 func (r *rowsImpl) Scan(args ...interface{}) error {
 	if err := r.Result.Scan(args...); err != nil {
-		return &errors.Unexpected{
+		return errors.Unexpected{
 			Message: err.Error(),
 		}
 	}

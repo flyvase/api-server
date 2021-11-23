@@ -35,7 +35,7 @@ func (d *DriverImpl) Exec(query string, args ...interface{}) error {
 			return errors.ErrSqlConnClosed
 		}
 
-		return &errors.Unexpected{
+		return errors.Unexpected{
 			Message: err.Error(),
 		}
 	}
@@ -50,7 +50,7 @@ func (d *DriverImpl) Query(query string, args ...interface{}) (gateway.Rows, err
 			return nil, errors.ErrSqlConnClosed
 		}
 
-		return nil, &errors.Unexpected{
+		return nil, errors.Unexpected{
 			Message: err.Error(),
 		}
 	}
