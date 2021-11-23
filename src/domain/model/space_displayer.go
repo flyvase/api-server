@@ -2,8 +2,8 @@ package model
 
 import "harvest/src/domain/value"
 
-type SpaceDisplayer struct {
-	Id          value.SpaceDisplayerId
+type SpaceDisplay struct {
+	Id          value.SpaceDisplayId
 	ImageUrl    string
 	Description string
 }

@@ -6,16 +6,16 @@ import (
 )
 
 type spaceDetails struct {
-	Id               uint32            `json:"id"`
-	Headline         string            `json:"headline"`
-	Access           string            `json:"access"`
-	NumberOfVisitors numberOfVisitors  `json:"number_of_visitors"`
-	CustomerSegment  customerSegment   `json:"customer_segment"`
-	Price            price             `json:"price"`
-	WebsiteUrl       string            `json:"website_url"`
-	Coordinate       geoPoint          `json:"coordinate"`
-	Images           []*spaceImage     `json:"images"`
-	Displayers       []*spaceDisplayer `json:"displayers"`
+	Id               uint32           `json:"id"`
+	Headline         string           `json:"headline"`
+	Access           string           `json:"access"`
+	NumberOfVisitors numberOfVisitors `json:"number_of_visitors"`
+	CustomerSegment  customerSegment  `json:"customer_segment"`
+	Price            price            `json:"price"`
+	WebsiteUrl       string           `json:"website_url"`
+	Coordinate       geoPoint         `json:"coordinate"`
+	Images           []*spaceImage    `json:"images"`
+	Displays         []*spaceDisplay  `json:"displays"`
 }
 
 func spaceDetailsFromModel(s *model.Space) *spaceDetails {
@@ -28,13 +28,13 @@ func spaceDetailsFromModel(s *model.Space) *spaceDetails {
 		images = []*spaceImage{}
 	}
 
-	var displayers []*spaceDisplayer
-	for _, d := range s.Displayers {
-		displayers = append(displayers, spaceDisplayerFromModel(d))
+	var displays []*spaceDisplay
+	for _, d := range s.Displays {
+		displays = append(displays, spaceDisplayFromModel(d))
 	}
 
-	if displayers == nil {
-		displayers = []*spaceDisplayer{}
+	if displays == nil {
+		displays = []*spaceDisplay{}
 	}
 
 	return &spaceDetails{
@@ -55,8 +55,8 @@ func spaceDetailsFromModel(s *model.Space) *spaceDetails {
 			Latitude:  s.Coordinate.Latitude,
 			Longitude: s.Coordinate.Longitude,
 		},
-		Images:     images,
-		Displayers: displayers,
+		Images:   images,
+		Displays: displays,
 	}
 }
 

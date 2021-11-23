@@ -5,15 +5,15 @@ import (
 	"harvest/src/domain/value"
 )
 
-type SpaceDisplayer struct {
+type SpaceDisplay struct {
 	Id          uint32
 	ImageUrl    string
 	Description string
 }
 
-func (d *SpaceDisplayer) toSpaceDisplayerModel() *model.SpaceDisplayer {
-	return &model.SpaceDisplayer{
-		Id: value.SpaceDisplayerId{
+func (d *SpaceDisplay) toSpaceDisplayModel() *model.SpaceDisplay {
+	return &model.SpaceDisplay{
+		Id: value.SpaceDisplayId{
 			Value: uint(d.Id),
 		},
 		ImageUrl:    d.ImageUrl,

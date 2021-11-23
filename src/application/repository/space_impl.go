@@ -225,50 +225,50 @@ func (s *SpaceImpl) getSpaceImages(id value.SpaceId, c chan *getSpaceImagesResul
 	}
 }
 
-type getSpaceDisplayersResult struct {
-	Value []*entity.SpaceDisplayer
+type getSpaceDisplaysResult struct {
+	Value []*entity.SpaceDisplay
 	Error error
 }
 
-func (s *SpaceImpl) getSpaceDisplayers(id value.SpaceId, c chan *getSpaceDisplayersResult, wg *sync.WaitGroup) {
+func (s *SpaceImpl) getSpaceDisplays(id value.SpaceId, c chan *getSpaceDisplaysResult, wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	spaceDisplayersRows, err := s.SqlDriver.Query(`
+	spaceDisplaysRows, err := s.SqlDriver.Query(`
 		select
 		id,
 		image_url,
 		description
-		from space_displayers
+		from space_displays
 		where space_id = ?
 	`, id.Value)
 	if err != nil {
-		c <- &getSpaceDisplayersResult{
+		c <- &getSpaceDisplaysResult{
 			Value: nil,
 			Error: err,
 		}
 	}
 
-	defer spaceDisplayersRows.Close()
+	defer spaceDisplaysRows.Close()
 
-	var spaceDisplayerEntities []*entity.SpaceDisplayer
-	for spaceDisplayersRows.Next() {
-		var spaceDisplayerEntity entity.SpaceDisplayer
-		if err := spaceDisplayersRows.Scan(
-			&spaceDisplayerEntity.Id,
-			&spaceDisplayerEntity.ImageUrl,
-			&spaceDisplayerEntity.Description,
+	var spaceDisplayEntities []*entity.SpaceDisplay
+	for spaceDisplaysRows.Next() {
+		var spaceDisplayEntity entity.SpaceDisplay
+		if err := spaceDisplaysRows.Scan(
+			&spaceDisplayEntity.Id,
+			&spaceDisplayEntity.ImageUrl,
+			&spaceDisplayEntity.Description,
 		); err != nil {
-			c <- &getSpaceDisplayersResult{
+			c <- &getSpaceDisplaysResult{
 				Value: nil,
 				Error: err,
 			}
 		}
 
-		spaceDisplayerEntities = append(spaceDisplayerEntities, &spaceDisplayerEntity)
+		spaceDisplayEntities = append(spaceDisplayEntities, &spaceDisplayEntity)
 	}
 
-	c <- &getSpaceDisplayersResult{
-		Value: spaceDisplayerEntities,
+	c <- &getSpaceDisplaysResult{
+		Value: spaceDisplayEntities,
 		Error: nil,
 	}
 }
@@ -286,10 +286,10 @@ func (s *SpaceImpl) Fetch(id value.SpaceId) (*model.Space, error) {
 	var wg sync.WaitGroup
 	wg.Add(2)
 	spaceImagesChannel := make(chan *getSpaceImagesResult, 1)
-	spaceDisplayersChannel := make(chan *getSpaceDisplayersResult, 1)
+	spaceDisplaysChannel := make(chan *getSpaceDisplaysResult, 1)
 
 	go s.getSpaceImages(id, spaceImagesChannel, &wg)
-	go s.getSpaceDisplayers(id, spaceDisplayersChannel, &wg)
+	go s.getSpaceDisplays(id, spaceDisplaysChannel, &wg)
 
 	wg.Wait()
 
@@ -298,13 +298,13 @@ func (s *SpaceImpl) Fetch(id value.SpaceId) (*model.Space, error) {
 		return nil, getSpaceImagesResult.Error
 	}
 
-	getSpaceDisplayersResult := <-spaceDisplayersChannel
-	if getSpaceDisplayersResult.Error != nil {
-		return nil, getSpaceDisplayersResult.Error
+	getSpaceDisplaysResult := <-spaceDisplaysChannel
+	if getSpaceDisplaysResult.Error != nil {
+		return nil, getSpaceDisplaysResult.Error
 	}
 
 	return spaceEntity.ToSpaceModel(
 		getSpaceImagesResult.Value,
-		getSpaceDisplayersResult.Value,
+		getSpaceDisplaysResult.Value,
 	), nil
 }
