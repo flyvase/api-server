@@ -1,8 +1,11 @@
 package repository
 
-import "harvest/src/domain/entity"
+import (
+	"harvest/src/domain/model"
+	"harvest/src/domain/value"
+)
 
 type Space interface {
-	List() ([]*entity.Space, error)
-	Fetch(uint32) (*entity.Space, error)
+	List() ([]*model.Space, error)
+	Fetch(value.SpaceId) (*model.Space, error)
 }
