@@ -14,5 +14,5 @@ type Space struct {
 	WebsiteUrl       string
 	Coordinate       value.GeoPoint
 	Images           []*SpaceImage
-	Displayers       []*SpaceDisplayer
+	Displays         []*SpaceDisplay
 }

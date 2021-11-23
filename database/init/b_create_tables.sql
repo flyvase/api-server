@@ -45,7 +45,7 @@ create table space_images (
   deleted_at datetime
 );
 
-create table space_displayers (
+create table space_displays (
   id int unsigned primary key auto_increment,
   space_id int unsigned,
   foreign key (space_id) references spaces(id) on delete cascade on update cascade,

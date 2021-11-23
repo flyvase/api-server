@@ -21,7 +21,7 @@ type Space struct {
 	Longitude           float32
 }
 
-func (s *Space) ToSpaceModel(imageEntities []*SpaceImage, displayerEntities []*SpaceDisplayer) *model.Space {
+func (s *Space) ToSpaceModel(imageEntities []*SpaceImage, displayEntities []*SpaceDisplay) *model.Space {
 	c, err := strconv.Atoi(s.MainCustomersSex)
 	if err != nil {
 		panic(err)
@@ -33,9 +33,9 @@ func (s *Space) ToSpaceModel(imageEntities []*SpaceImage, displayerEntities []*S
 		imageModels = append(imageModels, i.toSpaceImageModel())
 	}
 
-	var displayerModels []*model.SpaceDisplayer
-	for _, d := range displayerEntities {
-		displayerModels = append(displayerModels, d.toSpaceDisplayerModel())
+	var displayModels []*model.SpaceDisplay
+	for _, d := range displayEntities {
+		displayModels = append(displayModels, d.toSpaceDisplayModel())
 	}
 
 	return &model.Space{
@@ -64,7 +64,7 @@ func (s *Space) ToSpaceModel(imageEntities []*SpaceImage, displayerEntities []*S
 			Latitude:  s.Latitude,
 			Longitude: s.Longitude,
 		},
-		Images:     imageModels,
-		Displayers: displayerModels,
+		Images:   imageModels,
+		Displays: displayModels,
 	}
 }
