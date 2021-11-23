@@ -3,6 +3,7 @@ package handler
 import (
 	"harvest/src/adapter/http/response"
 	"harvest/src/core/errors"
+	"harvest/src/core/logger"
 	"harvest/src/domain/repository"
 	"harvest/src/domain/value"
 	"net/http"
@@ -13,9 +14,13 @@ import (
 
 func SpaceDetailsGet(spaceRepository repository.Space) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+		const component = "spaceDetailsGetHandler"
+		trace := getTraceId(r)
+
 		vars := mux.Vars(r)
 		id, err := strconv.ParseUint(vars["space_id"], 10, 32)
 		if err != nil {
+			logger.Error(component, err, trace)
 			http.Error(rw, "Invalid space id", http.StatusBadRequest)
 			return
 		}
@@ -29,11 +34,13 @@ func SpaceDetailsGet(spaceRepository repository.Space) http.Handler {
 			switch err.(type) {
 			case *errors.Unexpected:
 				{
+					logger.Error(component, err, trace)
 					http.Error(rw, "Unexpected error", http.StatusInternalServerError)
 					return
 				}
 			default:
 				{
+					logger.Error(component, err, trace)
 					http.Error(rw, "Data source unavailable", http.StatusInternalServerError)
 					return
 				}
@@ -47,6 +54,7 @@ func SpaceDetailsGet(spaceRepository repository.Space) http.Handler {
 
 		json, err := response.EncodeSpaceModel(spaceModel)
 		if err != nil {
+			logger.Error(component, err, trace)
 			http.Error(rw, "Failed to encode resources", http.StatusInternalServerError)
 			return
 		}
