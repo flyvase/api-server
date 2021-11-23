@@ -9,6 +9,7 @@ import (
 	"harvest/src/domain/model"
 	"harvest/src/domain/value"
 	"strconv"
+	"sync"
 )
 
 type image struct {
@@ -183,7 +184,9 @@ type getSpaceImagesResult struct {
 	Error error
 }
 
-func (s *SpaceImpl) getSpaceImages(id value.SpaceId, c chan *getSpaceImagesResult) {
+func (s *SpaceImpl) getSpaceImages(id value.SpaceId, c chan *getSpaceImagesResult, wg *sync.WaitGroup) {
+	defer wg.Done()
+
 	spaceImagesRows, err := s.SqlDriver.Query(`
 		select
 		id,
@@ -227,7 +230,9 @@ type getSpaceDisplayersResult struct {
 	Error error
 }
 
-func (s *SpaceImpl) getSpaceDisplayers(id value.SpaceId, c chan *getSpaceDisplayersResult) {
+func (s *SpaceImpl) getSpaceDisplayers(id value.SpaceId, c chan *getSpaceDisplayersResult, wg *sync.WaitGroup) {
+	defer wg.Done()
+
 	spaceDisplayersRows, err := s.SqlDriver.Query(`
 		select
 		id,
@@ -278,11 +283,15 @@ func (s *SpaceImpl) Fetch(id value.SpaceId) (*model.Space, error) {
 		return nil, err
 	}
 
-	spaceImagesChannel := make(chan *getSpaceImagesResult)
-	spaceDisplayersChannel := make(chan *getSpaceDisplayersResult)
+	var wg sync.WaitGroup
+	wg.Add(2)
+	spaceImagesChannel := make(chan *getSpaceImagesResult, 1)
+	spaceDisplayersChannel := make(chan *getSpaceDisplayersResult, 1)
 
-	go s.getSpaceImages(id, spaceImagesChannel)
-	go s.getSpaceDisplayers(id, spaceDisplayersChannel)
+	go s.getSpaceImages(id, spaceImagesChannel, &wg)
+	go s.getSpaceDisplayers(id, spaceDisplayersChannel, &wg)
+
+	wg.Wait()
 
 	getSpaceImagesResult := <-spaceImagesChannel
 	if getSpaceImagesResult.Error != nil {
