@@ -7,8 +7,8 @@ type price struct {
 	Duration int64 `json:"duration"`
 }
 
-func priceFromValue(p *value.Price) *price {
-	return &price{
+func priceFromValue(p value.Price) price {
+	return price{
 		Price:    p.Price,
 		Duration: p.Duration.Milliseconds(),
 	}

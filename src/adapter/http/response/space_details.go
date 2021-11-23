@@ -9,11 +9,11 @@ type spaceDetails struct {
 	Id               uint32            `json:"id"`
 	Headline         string            `json:"headline"`
 	Access           string            `json:"access"`
-	NumberOfVisitors *numberOfVisitors `json:"number_of_visitors"`
-	CustomerSegment  *customerSegment  `json:"customer_segment"`
-	Price            *price            `json:"price"`
+	NumberOfVisitors numberOfVisitors  `json:"number_of_visitors"`
+	CustomerSegment  customerSegment   `json:"customer_segment"`
+	Price            price             `json:"price"`
 	WebsiteUrl       string            `json:"website_url"`
-	Coordinate       *geoPoint         `json:"coordinate"`
+	Coordinate       geoPoint          `json:"coordinate"`
 	Images           []*spaceImage     `json:"images"`
 	Displayers       []*spaceDisplayer `json:"displayers"`
 }
@@ -42,16 +42,16 @@ func spaceDetailsFromModel(s *model.Space) *spaceDetails {
 		Headline: s.Headline,
 		Access:   s.Access,
 		NumberOfVisitors: numberOfVisitorsFromValue(
-			&s.NumberOfVisitors,
+			s.NumberOfVisitors,
 		),
 		CustomerSegment: customerSegmentFromValue(
-			&s.CustomerSegment,
+			s.CustomerSegment,
 		),
 		Price: priceFromValue(
-			&s.Price,
+			s.Price,
 		),
 		WebsiteUrl: s.WebsiteUrl,
-		Coordinate: &geoPoint{
+		Coordinate: geoPoint{
 			Latitude:  s.Coordinate.Latitude,
 			Longitude: s.Coordinate.Longitude,
 		},

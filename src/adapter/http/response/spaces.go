@@ -6,13 +6,13 @@ import (
 )
 
 type space struct {
-	Id               uint32            `json:"id"`
-	Headline         string            `json:"headline"`
-	Access           string            `json:"access"`
-	NumberOfVisitors *numberOfVisitors `json:"number_of_visitors"`
-	CustomerSegment  *customerSegment  `json:"customer_segment"`
-	Price            *price            `json:"price"`
-	Images           []*spaceImage     `json:"images"`
+	Id               uint32           `json:"id"`
+	Headline         string           `json:"headline"`
+	Access           string           `json:"access"`
+	NumberOfVisitors numberOfVisitors `json:"number_of_visitors"`
+	CustomerSegment  customerSegment  `json:"customer_segment"`
+	Price            price            `json:"price"`
+	Images           []*spaceImage    `json:"images"`
 }
 
 func spaceFromModel(s *model.Space) *space {
@@ -30,13 +30,13 @@ func spaceFromModel(s *model.Space) *space {
 		Headline: s.Headline,
 		Access:   s.Access,
 		NumberOfVisitors: numberOfVisitorsFromValue(
-			&s.NumberOfVisitors,
+			s.NumberOfVisitors,
 		),
 		CustomerSegment: customerSegmentFromValue(
-			&s.CustomerSegment,
+			s.CustomerSegment,
 		),
 		Price: priceFromValue(
-			&s.Price,
+			s.Price,
 		),
 		Images: images,
 	}
