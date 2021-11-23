@@ -20,7 +20,6 @@ func SpaceDetailsGet(spaceRepository repository.Space) http.Handler {
 		vars := mux.Vars(r)
 		id, err := strconv.ParseUint(vars["space_id"], 10, 32)
 		if err != nil {
-			logger.Error(component, err, trace)
 			http.Error(rw, "Invalid space id", http.StatusBadRequest)
 			return
 		}
