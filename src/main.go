@@ -43,7 +43,7 @@ func main() {
 		),
 	).Methods("GET")
 
-	mux.Handle("/spaces/{space_id:[0-9]{1,10}}",
+	mux.Handle("/spaces/{space_id:[0-9]{1,10}}/",
 		middleware.Defaults(
 			&authRepository,
 			handler.SpaceDetailsGet(
