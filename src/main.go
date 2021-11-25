@@ -1,12 +1,12 @@
 package main
 
 import (
-	"harvest/src/adapter/gateway/firebase"
-	"harvest/src/adapter/gateway/sql"
-	"harvest/src/adapter/http/handler"
-	"harvest/src/adapter/http/middleware"
 	"harvest/src/application/repository"
 	"harvest/src/config"
+	"harvest/src/infrastructure/gateway/firebase"
+	"harvest/src/infrastructure/gateway/sql"
+	"harvest/src/infrastructure/http/handler"
+	"harvest/src/infrastructure/http/middleware"
 	"log"
 	"net/http"
 	"os"
