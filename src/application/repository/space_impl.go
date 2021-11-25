@@ -83,6 +83,10 @@ func (r *listResult) toSpaceModel() *model.Space {
 			Price:    uint(r.DailyPrice),
 			Duration: constant.DayDuration(),
 		},
+		Coordinate: value.GeoPoint{
+			Latitude:  r.Latitude,
+			Longitude: r.Longitude,
+		},
 		Images: imageModels,
 	}
 }
@@ -102,6 +106,8 @@ func (s *SpaceImpl) List() ([]*model.Space, error) {
 		spaces.min_main_customers_age,
 		spaces.max_main_customers_age,
 		spaces.daily_price,
+		ST_Latitude(coordinate),
+		ST_Longitude(coordinate),
 		json_arrayagg(json_object("id", space_images.id, "image_url", space_images.image_url))
 		from spaces
 		left join space_images on spaces.id = space_images.space_id
@@ -125,6 +131,8 @@ func (s *SpaceImpl) List() ([]*model.Space, error) {
 			&result.MinMainCustomersAge,
 			&result.MaxMainCustomersAge,
 			&result.DailyPrice,
+			&result.Latitude,
+			&result.Longitude,
 			&result.ImagesJson,
 		); err != nil {
 			return nil, err

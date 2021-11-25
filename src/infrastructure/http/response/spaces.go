@@ -12,6 +12,7 @@ type space struct {
 	NumberOfVisitors numberOfVisitors `json:"number_of_visitors"`
 	CustomerSegment  customerSegment  `json:"customer_segment"`
 	Price            price            `json:"price"`
+	Coordinate       geoPoint         `json:"coordinate"`
 	Images           []*spaceImage    `json:"images"`
 }
 
@@ -37,6 +38,9 @@ func spaceFromModel(s *model.Space) *space {
 		),
 		Price: priceFromValue(
 			s.Price,
+		),
+		Coordinate: geoPointFromValue(
+			s.Coordinate,
 		),
 		Images: images,
 	}
