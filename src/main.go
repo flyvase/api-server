@@ -3,6 +3,7 @@ package main
 import (
 	"harvest/src/application/repository"
 	"harvest/src/config"
+	"harvest/src/infrastructure/gateway"
 	"harvest/src/infrastructure/gateway/firebase"
 	"harvest/src/infrastructure/gateway/sql"
 	"harvest/src/infrastructure/http/handler"
@@ -20,8 +21,8 @@ func main() {
 
 	sqlDriver := sql.NewDriver()
 	firebaseApp := firebase.InitializeApp()
-	firebaseAuth := firebase.InitializeAuth(firebaseApp)
-	firebaseAuthImpl := firebase.AuthImpl{
+	firebaseAuth := gateway.InitializeAuth(firebaseApp)
+	firebaseAuthImpl := gateway.AuthImpl{
 		Client: firebaseAuth,
 	}
 	authRepository := repository.AuthImpl{
