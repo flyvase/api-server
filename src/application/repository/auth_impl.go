@@ -1,11 +1,11 @@
 package repository
 
 import (
-	"harvest/src/application/gateway/firebase"
+	"harvest/src/application/gateway"
 )
 
 type AuthImpl struct {
-	Client firebase.Auth
+	Client gateway.Auth
 }
 
 func (a *AuthImpl) VerifyToken(token string) error {

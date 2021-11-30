@@ -2,7 +2,7 @@ package repository
 
 import (
 	"encoding/json"
-	"harvest/src/application/gateway/entity"
+	"harvest/src/application/entity"
 	"harvest/src/application/gateway/sql"
 	"harvest/src/core/constant"
 	"harvest/src/core/errors"
