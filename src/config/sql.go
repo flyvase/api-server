@@ -13,5 +13,11 @@ var (
 )
 
 func GetDbUri() string {
-	return fmt.Sprintf("%s:%s@tcp(%s)/%s", dbUser, dbPwd, dbInstanceConnectionName, dbName)
+	if Environment == "dev" && Mode == "debug" {
+		return fmt.Sprintf("%s:%s@tcp(%s)/%s", dbUser, dbPwd, dbInstanceConnectionName, dbName)
+	} else {
+		return fmt.Sprintf(
+			"%s:%s@unix(/cloudsql/%s)/%s", dbUser, dbPwd, dbInstanceConnectionName, dbName,
+		)
+	}
 }
