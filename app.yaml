@@ -5,7 +5,6 @@ includes:
 
 env_variables:
   MODE: release
-  ENVIRONMENT: prob
 
 automatic_scaling:
   max_idle_instances: 1
