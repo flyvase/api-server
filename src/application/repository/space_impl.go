@@ -316,3 +316,25 @@ func (s *SpaceImpl) Fetch(id value.SpaceId) (*model.Space, error) {
 		getSpaceDisplaysResult.Value,
 	), nil
 }
+
+func (s *SpaceImpl) GetWebsiteUrl(id value.SpaceId) (string, error) {
+	row := s.SqlDriver.QueryRow(`
+		select
+		website_url
+		from spaces
+		where id = ?
+	`, id.Value)
+
+	var url string
+	if err := row.Scan(
+		&url,
+	); err != nil {
+		if err == errors.ErrSqlNoRows {
+			return "", nil
+		}
+
+		return "", err
+	}
+
+	return url, nil
+}
