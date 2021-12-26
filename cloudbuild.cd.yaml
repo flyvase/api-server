@@ -3,7 +3,7 @@ steps:
     args: ['go', 'test', '-v', './src/...']
 
   - name: 'golang:1.15.13-alpine'
-    args: ['go', 'vet ./src/...']
+    args: ['go', 'vet', './src/...']
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: '/bin/bash'
