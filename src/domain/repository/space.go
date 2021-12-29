@@ -8,4 +8,5 @@ import (
 type Space interface {
 	List() ([]*model.Space, error)
 	Fetch(value.SpaceId) (*model.Space, error)
+	GetWebsiteUrl(value.SpaceId) (string, error)
 }

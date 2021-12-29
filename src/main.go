@@ -53,6 +53,15 @@ func main() {
 		),
 	).Methods("GET")
 
+	mux.Handle("/spaces/{space_id:[0-9]{1,10}}/ogp/",
+		middleware.Defaults(
+			&authRepository,
+			handler.SpaceOgpGet(
+				&spaceRepository,
+			),
+		),
+	).Methods("GET")
+
 	c := cors.New(
 		cors.Options{
 			AllowedOrigins: config.AllowedOrigin(),
