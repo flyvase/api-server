@@ -1,0 +1,11 @@
+steps:
+  - name: 'golang:1.15.13-alpine'
+    entrypoint: /bin/ash
+    args: ['-c', 'go test -v ./src/...']
+  - name: 'golang:1.15.13-alpine'
+    entrypoint: /bin/ash
+    args: ['-c', 'go vet ./src/...']
+
+options:
+  env:
+    - 'CGO_ENABLED=0'
