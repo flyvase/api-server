@@ -1,16 +1,20 @@
 steps:
-  - name: 'golang:1.15.13-alpine'
-    args: ['go', 'test', '-v', './src/...']
+  - name: 'golang:1.16.12-alpine'
+    entrypoint: 'go'
+    dir: src
+    args: ['vet', './...']
 
-  - name: 'golang:1.15.13-alpine'
-    args: ['go', 'vet', './src/...']
+  - name: 'golang:1.16.12-alpine'
+    entrypoint: 'go'
+    dir: src
+    args: ['test', '-v', './...']
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: '/bin/bash'
     args:
       [
         '-c',
-        'gcloud secrets versions access latest --secret=harvest-secrets > secrets.yaml',
+        'gcloud secrets versions access latest --secret=api-server-secrets > secrets.yaml',
       ]
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
