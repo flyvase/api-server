@@ -1,6 +1,6 @@
 package response
 
-import "harvest/src/domain/value"
+import "api-server/src/domain/value"
 
 type geoPoint struct {
 	Latitude  float32 `json:"latitude"`

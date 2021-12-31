@@ -1,9 +1,9 @@
 package entity
 
 import (
-	"harvest/src/core/constant"
-	"harvest/src/domain/model"
-	"harvest/src/domain/value"
+	"api-server/src/core/constant"
+	"api-server/src/domain/model"
+	"api-server/src/domain/value"
 	"strconv"
 )
 

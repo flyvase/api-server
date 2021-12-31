@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"harvest/src/domain/repository"
+	"api-server/src/domain/repository"
 	"net/http"
 	"strings"
 )

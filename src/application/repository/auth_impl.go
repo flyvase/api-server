@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"harvest/src/application/gateway"
+	"api-server/src/application/gateway"
 )
 
 type AuthImpl struct {

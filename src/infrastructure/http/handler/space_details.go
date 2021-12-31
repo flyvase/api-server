@@ -1,11 +1,11 @@
 package handler
 
 import (
-	"harvest/src/core/errors"
-	"harvest/src/core/logger"
-	"harvest/src/domain/repository"
-	"harvest/src/domain/value"
-	"harvest/src/infrastructure/http/response"
+	"api-server/src/core/errors"
+	"api-server/src/core/logger"
+	"api-server/src/domain/repository"
+	"api-server/src/domain/value"
+	"api-server/src/infrastructure/http/response"
 	"net/http"
 	"strconv"
 
