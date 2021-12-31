@@ -1,4 +1,4 @@
-use main;
+use main_database;
 
 create table space_owners (
   id int unsigned primary key auto_increment,
