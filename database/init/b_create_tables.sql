@@ -1,4 +1,4 @@
-use mr_president;
+use main;
 
 create table space_owners (
   id int unsigned primary key auto_increment,

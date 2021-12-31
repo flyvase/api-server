@@ -1,6 +1,6 @@
 package model
 
-import "harvest/src/domain/value"
+import "api-server/src/domain/value"
 
 type SpaceDisplay struct {
 	Id          value.SpaceDisplayId

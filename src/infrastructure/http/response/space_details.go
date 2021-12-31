@@ -1,8 +1,8 @@
 package response
 
 import (
+	"api-server/src/domain/model"
 	"encoding/json"
-	"harvest/src/domain/model"
 )
 
 type spaceDetails struct {

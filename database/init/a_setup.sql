@@ -1,7 +1,7 @@
-create database mr_president character set utf8mb4;
+create database main character set utf8mb4;
 
-create user harvest identified by 'FM5fX|jt(gdv-N%L';
+create user api_server identified by 'FM5fX|jt(gdv-N%L';
 
 grant select,
   insert,
-  update on mr_president.* to harvest;
+  update on main.* to api_server;

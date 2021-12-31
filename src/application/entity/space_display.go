@@ -1,8 +1,8 @@
 package entity
 
 import (
-	"harvest/src/domain/model"
-	"harvest/src/domain/value"
+	"api-server/src/domain/model"
+	"api-server/src/domain/value"
 )
 
 type SpaceDisplay struct {

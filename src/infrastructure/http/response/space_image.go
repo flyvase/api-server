@@ -1,6 +1,6 @@
 package response
 
-import "harvest/src/domain/model"
+import "api-server/src/domain/model"
 
 type spaceImage struct {
 	Id       uint32 `json:"id"`

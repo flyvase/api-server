@@ -1,10 +1,10 @@
 package sql
 
 import (
+	gateway "api-server/src/application/gateway/sql"
+	"api-server/src/config"
+	"api-server/src/core/errors"
 	"database/sql"
-	gateway "harvest/src/application/gateway/sql"
-	"harvest/src/config"
-	"harvest/src/core/errors"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"

@@ -1,8 +1,8 @@
 package sql
 
 import (
+	"api-server/src/core/errors"
 	"database/sql"
-	"harvest/src/core/errors"
 )
 
 type rowImpl struct {

@@ -1,4 +1,4 @@
-use mr_president;
+use main;
 
 -- space1
 insert into space_owners (name) value ('珈琲物語');

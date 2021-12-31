@@ -1,7 +1,7 @@
 package model
 
 import (
-	"harvest/src/domain/value"
+	"api-server/src/domain/value"
 )
 
 type SpaceImage struct {
