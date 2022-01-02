@@ -9,15 +9,15 @@ steps:
     dir: src
     args: ['test', '-v', './...']
 
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: '/bin/bash'
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:alpine'
+    entrypoint: '/bin/ash'
     args:
       [
         '-c',
         'gcloud secrets versions access latest --secret=api-server-secrets > secrets.yaml',
       ]
 
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:alpine'
     entrypoint: 'gcloud'
     args: ['app', 'deploy', '--quiet']
 
