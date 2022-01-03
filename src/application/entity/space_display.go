@@ -6,7 +6,7 @@ import (
 )
 
 type SpaceDisplay struct {
-	Id          uint32
+	Id          uint64
 	ImageUrl    string
 	Description string
 }
@@ -14,7 +14,7 @@ type SpaceDisplay struct {
 func (d *SpaceDisplay) toSpaceDisplayModel() *model.SpaceDisplay {
 	return &model.SpaceDisplay{
 		Id: value.SpaceDisplayId{
-			Value: uint(d.Id),
+			Value: d.Id,
 		},
 		ImageUrl:    d.ImageUrl,
 		Description: d.Description,

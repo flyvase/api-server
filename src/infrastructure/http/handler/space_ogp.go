@@ -27,7 +27,7 @@ func SpaceOgpGet(spaceRepository repository.Space) http.Handler {
 
 		url, err := spaceRepository.GetWebsiteUrl(
 			value.SpaceId{
-				Value: uint(id),
+				Value: id,
 			},
 		)
 		if err != nil {

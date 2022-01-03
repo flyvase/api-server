@@ -26,7 +26,7 @@ func SpaceDetailsGet(spaceRepository repository.Space) http.Handler {
 
 		spaceModel, err := spaceRepository.Fetch(
 			value.SpaceId{
-				Value: uint(id),
+				Value: id,
 			},
 		)
 		if err != nil {

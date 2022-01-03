@@ -6,14 +6,14 @@ import (
 )
 
 type SpaceImage struct {
-	Id       uint32
+	Id       uint64
 	ImageUrl string
 }
 
 func (i *SpaceImage) toSpaceImageModel() *model.SpaceImage {
 	return &model.SpaceImage{
 		Id: value.SpaceImageId{
-			Value: uint(i.Id),
+			Value: i.Id,
 		},
 		ImageUrl: i.ImageUrl,
 	}

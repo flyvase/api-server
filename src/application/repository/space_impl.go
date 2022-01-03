@@ -13,14 +13,14 @@ import (
 )
 
 type image struct {
-	Id       uint32 `json:"id"`
+	Id       uint64 `json:"id"`
 	ImageUrl string `json:"image_url"`
 }
 
 func (i *image) toSpaceImageModel() *model.SpaceImage {
 	return &model.SpaceImage{
 		Id: value.SpaceImageId{
-			Value: uint(i.Id),
+			Value: i.Id,
 		},
 		ImageUrl: i.ImageUrl,
 	}
@@ -66,7 +66,7 @@ func (r *listResult) toSpaceModel() *model.Space {
 
 	return &model.Space{
 		Id: value.SpaceId{
-			Value: uint(r.Id),
+			Value: r.Id,
 		},
 		Headline: r.Headline,
 		Access:   r.Access,
