@@ -9,7 +9,7 @@ create table space_owners (
 );
 
 create table spaces (
-  id int unsigned primary key auto_increment,
+  id bigint unsigned primary key auto_increment,
   owner_id int unsigned,
   foreign key (owner_id) references space_owners(id) on delete cascade on update cascade,
   headline varchar(240) not null,
@@ -28,8 +28,8 @@ create table spaces (
 );
 
 create table space_images (
-  id int unsigned primary key auto_increment,
-  space_id int unsigned,
+  id bigint unsigned primary key auto_increment,
+  space_id bigint unsigned,
   foreign key (space_id) references spaces(id) on delete cascade on update cascade,
   image_url text not null,
   created_at datetime not null default current_timestamp,
@@ -38,8 +38,8 @@ create table space_images (
 );
 
 create table space_displays (
-  id int unsigned primary key auto_increment,
-  space_id int unsigned,
+  id bigint unsigned primary key auto_increment,
+  space_id bigint unsigned,
   foreign key (space_id) references spaces(id) on delete cascade on update cascade,
   image_url text not null,
   description varchar(120) not null,

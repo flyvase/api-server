@@ -8,7 +8,7 @@ import (
 )
 
 type Space struct {
-	Id                  uint32
+	Id                  uint64
 	Headline            string
 	Access              string
 	WeeklyVisitors      uint32
@@ -40,7 +40,7 @@ func (s *Space) ToSpaceModel(imageEntities []*SpaceImage, displayEntities []*Spa
 
 	return &model.Space{
 		Id: value.SpaceId{
-			Value: uint(s.Id),
+			Value: s.Id,
 		},
 		Headline: s.Headline,
 		Access:   s.Access,

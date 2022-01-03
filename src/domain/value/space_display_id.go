@@ -1,5 +1,5 @@
 package value
 
 type SpaceDisplayId struct {
-	Value uint
+	Value uint64
 }
