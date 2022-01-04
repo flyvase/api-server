@@ -12,20 +12,13 @@ type LogEntry struct {
 	Component string `json:"component,omitempty"`
 }
 
-func (e *LogEntry) String() string {
+func (e LogEntry) String() string {
 	if e.Severity == "" {
 		e.Severity = "INFO"
 	}
 	out, err := json.Marshal(e)
 	if err != nil {
-		log.Println(
-			LogEntry{
-				Message:   err.Error(),
-				Severity:  "ERROR",
-				Trace:     e.Trace,
-				Component: "logger",
-			},
-		)
+		log.Printf("json.Marshal: %v", err)
 	}
 	return string(out)
 }
