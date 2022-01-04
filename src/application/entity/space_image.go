@@ -6,11 +6,11 @@ import (
 )
 
 type SpaceImage struct {
-	Id       uint64
-	ImageUrl string
+	Id       uint64 `json:"id"`
+	ImageUrl string `json:"image_url"`
 }
 
-func (i *SpaceImage) toSpaceImageModel() *model.SpaceImage {
+func (i *SpaceImage) ToSpaceImageModel() *model.SpaceImage {
 	return &model.SpaceImage{
 		Id: value.SpaceImageId{
 			Value: i.Id,

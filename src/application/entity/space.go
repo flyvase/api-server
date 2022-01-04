@@ -30,7 +30,7 @@ func (s *Space) ToSpaceModel(imageEntities []*SpaceImage, displayEntities []*Spa
 
 	var imageModels []*model.SpaceImage
 	for _, i := range imageEntities {
-		imageModels = append(imageModels, i.toSpaceImageModel())
+		imageModels = append(imageModels, i.ToSpaceImageModel())
 	}
 
 	var displayModels []*model.SpaceDisplay
