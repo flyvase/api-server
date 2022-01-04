@@ -12,26 +12,12 @@ import (
 	"sync"
 )
 
-type image struct {
-	Id       uint64 `json:"id"`
-	ImageUrl string `json:"image_url"`
-}
-
-func (i *image) toSpaceImageModel() *model.SpaceImage {
-	return &model.SpaceImage{
-		Id: value.SpaceImageId{
-			Value: i.Id,
-		},
-		ImageUrl: i.ImageUrl,
-	}
-}
-
 type listResult struct {
 	entity.Space
 	ImagesJson []byte
 }
 
-func isEmptyImages(images []*image) bool {
+func isEmptyImages(images []*entity.SpaceImage) bool {
 	if len(images) == 1 && images[0].Id == 0 && images[0].ImageUrl == "" {
 		return true
 	}
@@ -39,8 +25,8 @@ func isEmptyImages(images []*image) bool {
 	return false
 }
 
-func (r *listResult) decodeImages() []*image {
-	var images []*image
+func (r *listResult) decodeImages() []*entity.SpaceImage {
+	var images []*entity.SpaceImage
 	json.Unmarshal(r.ImagesJson, &images)
 
 	if isEmptyImages(images) {
@@ -55,7 +41,7 @@ func (r *listResult) toSpaceModel() *model.Space {
 
 	var imageModels []*model.SpaceImage
 	for _, i := range images {
-		imageModels = append(imageModels, i.toSpaceImageModel())
+		imageModels = append(imageModels, i.ToSpaceImageModel())
 	}
 
 	c, err := strconv.Atoi(r.MainCustomersSex)
