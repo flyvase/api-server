@@ -1,12 +1,12 @@
 package repository
 
 import (
-	"api-server/src/application/gateway/sql"
 	"api-server/src/core/constant"
 	"api-server/src/core/errors"
 	"api-server/src/domain/model"
 	"api-server/src/domain/value"
 	"api-server/src/infrastructure/entity"
+	"api-server/src/infrastructure/gateway/sql"
 	"encoding/json"
 	"strconv"
 	"sync"
@@ -78,7 +78,7 @@ func (r *listResult) toSpaceModel() *model.Space {
 }
 
 type SpaceImpl struct {
-	SqlDriver sql.Driver
+	SqlDriver *sql.Driver
 }
 
 func (s *SpaceImpl) List() ([]*model.Space, error) {
