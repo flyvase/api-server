@@ -44,47 +44,44 @@ func (r *listResult) toSpaceModel() *model.Space {
 		imageModels = append(imageModels, i.ToSpaceImageModel())
 	}
 
+	var convertedAccess string
+	if r.Access.Valid {
+		convertedAccess = r.Access.String
+	}
+
+	var numberOfVisitors value.NumberOfVisitors
+	if r.WeeklyVisitors.Valid {
+		numberOfVisitors = value.NumberOfVisitors{
+			Visitors: uint(r.WeeklyVisitors.Int32),
+			Duration: constant.WeekDuration(),
+		}
+	}
+
 	c, err := strconv.Atoi(r.MainCustomersSex)
 	if err != nil {
 		panic(err)
 	}
 	sexCode := uint8(c)
 
-	var convertedAccess string
-	if r.Access.Valid {
-		convertedAccess = r.Access.String
-	}
-
-	var convertedWeeklyVisitors uint32
-	if r.WeeklyVisitors.Valid {
-		convertedWeeklyVisitors = uint32(r.WeeklyVisitors.Int32)
-	}
-
-	var convertedMinMainCustomersAge uint8
-	if r.MinMainCustomersAge.Valid {
-		convertedMinMainCustomersAge = uint8(r.MinMainCustomersAge.Int32)
-	}
-
-	var convertedMaxMainCustomersAge uint8
-	if r.MaxMainCustomersAge.Valid {
-		convertedMaxMainCustomersAge = uint8(r.MaxMainCustomersAge.Int32)
+	var customerSegment value.CustomerSegment
+	if r.MinMainCustomersAge.Valid && r.MaxMainCustomersAge.Valid {
+		customerSegment = value.CustomerSegment{
+			Sex: value.Sex{
+				Code: sexCode,
+			},
+			MinAge: uint8(r.MinMainCustomersAge.Int32),
+			MaxAge: uint8(r.MaxMainCustomersAge.Int32),
+		}
 	}
 
 	return &model.Space{
 		Id: value.SpaceId{
 			Value: r.Id,
 		},
-		Headline: r.Headline,
-		Access:   convertedAccess,
-		NumberOfVisitors: value.NumberOfVisitors{
-			Visitors: uint(convertedWeeklyVisitors),
-			Duration: constant.WeekDuration(),
-		},
-		CustomerSegment: value.CustomerSegment{
-			Sex:    value.NewSex(sexCode),
-			MinAge: convertedMinMainCustomersAge,
-			MaxAge: convertedMaxMainCustomersAge,
-		},
+		Headline:         r.Headline,
+		Access:           convertedAccess,
+		NumberOfVisitors: numberOfVisitors,
+		CustomerSegment:  customerSegment,
 		Price: value.Price{
 			Price:    uint(r.DailyPrice),
 			Duration: constant.DayDuration(),

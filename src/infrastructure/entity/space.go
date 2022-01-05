@@ -23,12 +23,6 @@ type Space struct {
 }
 
 func (s *Space) ToSpaceModel(imageEntities []*SpaceImage, displayEntities []*SpaceDisplay) *model.Space {
-	c, err := strconv.Atoi(s.MainCustomersSex)
-	if err != nil {
-		panic(err)
-	}
-	sexCode := uint8(c)
-
 	var imageModels []*model.SpaceImage
 	for _, i := range imageEntities {
 		imageModels = append(imageModels, i.ToSpaceImageModel())
@@ -44,19 +38,29 @@ func (s *Space) ToSpaceModel(imageEntities []*SpaceImage, displayEntities []*Spa
 		convertedAccess = s.Access.String
 	}
 
-	var convertedWeeklyVisitors uint32
+	var numberOfVisitors value.NumberOfVisitors
 	if s.WeeklyVisitors.Valid {
-		convertedWeeklyVisitors = uint32(s.WeeklyVisitors.Int32)
+		numberOfVisitors = value.NumberOfVisitors{
+			Visitors: uint(s.WeeklyVisitors.Int32),
+			Duration: constant.WeekDuration(),
+		}
 	}
 
-	var convertedMinMainCustomersAge uint8
-	if s.MinMainCustomersAge.Valid {
-		convertedMinMainCustomersAge = uint8(s.MinMainCustomersAge.Int32)
+	c, err := strconv.Atoi(s.MainCustomersSex)
+	if err != nil {
+		panic(err)
 	}
+	sexCode := uint8(c)
 
-	var convertedMaxMainCustomersAge uint8
-	if s.MaxMainCustomersAge.Valid {
-		convertedMaxMainCustomersAge = uint8(s.MaxMainCustomersAge.Int32)
+	var customerSegment value.CustomerSegment
+	if s.MinMainCustomersAge.Valid && s.MaxMainCustomersAge.Valid {
+		customerSegment = value.CustomerSegment{
+			Sex: value.Sex{
+				Code: sexCode,
+			},
+			MinAge: uint8(s.MinMainCustomersAge.Int32),
+			MaxAge: uint8(s.MaxMainCustomersAge.Int32),
+		}
 	}
 
 	var convertedWebsiteUrl string
@@ -68,19 +72,10 @@ func (s *Space) ToSpaceModel(imageEntities []*SpaceImage, displayEntities []*Spa
 		Id: value.SpaceId{
 			Value: s.Id,
 		},
-		Headline: s.Headline,
-		Access:   convertedAccess,
-		NumberOfVisitors: value.NumberOfVisitors{
-			Visitors: uint(convertedWeeklyVisitors),
-			Duration: constant.WeekDuration(),
-		},
-		CustomerSegment: value.CustomerSegment{
-			Sex: value.Sex{
-				Code: sexCode,
-			},
-			MinAge: convertedMinMainCustomersAge,
-			MaxAge: convertedMaxMainCustomersAge,
-		},
+		Headline:         s.Headline,
+		Access:           convertedAccess,
+		NumberOfVisitors: numberOfVisitors,
+		CustomerSegment:  customerSegment,
 		Price: value.Price{
 			Price:    uint(s.DailyPrice),
 			Duration: constant.DayDuration(),
