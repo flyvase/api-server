@@ -8,8 +8,8 @@ type customerSegment struct {
 	MaxAge uint8  `json:"max_age"`
 }
 
-func customerSegmentFromValue(s value.CustomerSegment) customerSegment {
-	return customerSegment{
+func customerSegmentFromValue(s value.CustomerSegment) *customerSegment {
+	return &customerSegment{
 		Sex:    s.Sex.ToString(),
 		MinAge: s.MinAge,
 		MaxAge: s.MaxAge,
