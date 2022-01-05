@@ -1,14 +1,15 @@
-package firebase
+package gateway
 
 import (
 	"api-server/src/config"
 	"context"
 
 	firebase "firebase.google.com/go/v4"
+	"firebase.google.com/go/v4/auth"
 	"google.golang.org/api/option"
 )
 
-func InitializeApp() *firebase.App {
+func InitializeFirebaseApp() *firebase.App {
 	if config.Mode == "debug" && config.Environment == "dev" {
 		opt := option.WithCredentialsJSON([]byte(`{
 			"type": "service_account",
@@ -36,4 +37,13 @@ func InitializeApp() *firebase.App {
 	}
 
 	return app
+}
+
+func InitializeFirebaseAuth(app *firebase.App) *auth.Client {
+	auth, err := app.Auth(context.Background())
+	if err != nil {
+		panic(err)
+	}
+
+	return auth
 }

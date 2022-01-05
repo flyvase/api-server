@@ -1,13 +1,16 @@
 package repository
 
 import (
-	"api-server/src/application/gateway"
+	"context"
+
+	"firebase.google.com/go/v4/auth"
 )
 
 type AuthImpl struct {
-	Client gateway.Auth
+	Client *auth.Client
 }
 
 func (a *AuthImpl) VerifyToken(token string) error {
-	return a.Client.VerifyIDToken(token)
+	_, err := a.Client.VerifyIDToken(context.Background(), token)
+	return err
 }
