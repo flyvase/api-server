@@ -50,20 +50,40 @@ func (r *listResult) toSpaceModel() *model.Space {
 	}
 	sexCode := uint8(c)
 
+	var convertedAccess string
+	if r.Access.Valid {
+		convertedAccess = r.Access.String
+	}
+
+	var convertedWeeklyVisitors uint32
+	if r.WeeklyVisitors.Valid {
+		convertedWeeklyVisitors = uint32(r.WeeklyVisitors.Int32)
+	}
+
+	var convertedMinMainCustomersAge uint8
+	if r.MinMainCustomersAge.Valid {
+		convertedMinMainCustomersAge = uint8(r.MinMainCustomersAge.Int32)
+	}
+
+	var convertedMaxMainCustomersAge uint8
+	if r.MaxMainCustomersAge.Valid {
+		convertedMaxMainCustomersAge = uint8(r.MaxMainCustomersAge.Int32)
+	}
+
 	return &model.Space{
 		Id: value.SpaceId{
 			Value: r.Id,
 		},
 		Headline: r.Headline,
-		Access:   r.Access,
+		Access:   convertedAccess,
 		NumberOfVisitors: value.NumberOfVisitors{
-			Visitors: uint(r.WeeklyVisitors),
+			Visitors: uint(convertedWeeklyVisitors),
 			Duration: constant.WeekDuration(),
 		},
 		CustomerSegment: value.CustomerSegment{
 			Sex:    value.NewSex(sexCode),
-			MinAge: r.MinMainCustomersAge,
-			MaxAge: r.MaxMainCustomersAge,
+			MinAge: convertedMinMainCustomersAge,
+			MaxAge: convertedMaxMainCustomersAge,
 		},
 		Price: value.Price{
 			Price:    uint(r.DailyPrice),
