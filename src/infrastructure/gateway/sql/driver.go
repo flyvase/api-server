@@ -1,7 +1,6 @@
 package sql
 
 import (
-	gateway "api-server/src/application/gateway/sql"
 	"api-server/src/config"
 	"api-server/src/core/errors"
 	"database/sql"
@@ -10,11 +9,11 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type DriverImpl struct {
-	DB *sql.DB
+type Driver struct {
+	Db *sql.DB
 }
 
-func NewDriver() *DriverImpl {
+func NewDriver() *Driver {
 	db, err := sql.Open("mysql", config.GetDbUri())
 	if err != nil {
 		panic(err)
@@ -25,11 +24,11 @@ func NewDriver() *DriverImpl {
 	db.SetMaxIdleConns(25)
 	db.SetConnMaxLifetime(5 * time.Minute)
 
-	return &DriverImpl{DB: db}
+	return &Driver{Db: db}
 }
 
-func (d *DriverImpl) Exec(query string, args ...interface{}) error {
-	_, err := d.DB.Exec(query, args...)
+func (d *Driver) Exec(query string, args ...interface{}) error {
+	_, err := d.Db.Exec(query, args...)
 	if err != nil {
 		if err == sql.ErrConnDone {
 			return errors.ErrSqlConnClosed
@@ -43,8 +42,8 @@ func (d *DriverImpl) Exec(query string, args ...interface{}) error {
 	return nil
 }
 
-func (d *DriverImpl) Query(query string, args ...interface{}) (gateway.Rows, error) {
-	rows, err := d.DB.Query(query, args...)
+func (d *Driver) Query(query string, args ...interface{}) (*rows, error) {
+	r, err := d.Db.Query(query, args...)
 	if err != nil {
 		if err == sql.ErrConnDone {
 			return nil, errors.ErrSqlConnClosed
@@ -55,14 +54,14 @@ func (d *DriverImpl) Query(query string, args ...interface{}) (gateway.Rows, err
 		}
 	}
 
-	return &rowsImpl{
-		Result: rows,
+	return &rows{
+		Result: r,
 	}, nil
 }
 
-func (d *DriverImpl) QueryRow(query string, args ...interface{}) gateway.Row {
-	row := d.DB.QueryRow(query, args...)
-	return &rowImpl{
-		Result: row,
+func (d *Driver) QueryRow(query string, args ...interface{}) *row {
+	r := d.Db.QueryRow(query, args...)
+	return &row{
+		Result: r,
 	}
 }

@@ -1,13 +1,12 @@
 package main
 
 import (
-	"api-server/src/application/repository"
 	"api-server/src/config"
 	"api-server/src/infrastructure/gateway"
-	"api-server/src/infrastructure/gateway/firebase"
 	"api-server/src/infrastructure/gateway/sql"
 	"api-server/src/infrastructure/http/handler"
 	"api-server/src/infrastructure/http/middleware"
+	"api-server/src/infrastructure/repository"
 	"log"
 	"net/http"
 	"os"
@@ -20,13 +19,10 @@ func main() {
 	log.SetFlags(0)
 
 	sqlDriver := sql.NewDriver()
-	firebaseApp := firebase.InitializeApp()
-	firebaseAuth := gateway.InitializeAuth(firebaseApp)
-	firebaseAuthImpl := gateway.AuthImpl{
-		Client: firebaseAuth,
-	}
+	firebaseApp := gateway.InitializeFirebaseApp()
+	firebaseAuth := gateway.InitializeFirebaseAuth(firebaseApp)
 	authRepository := repository.AuthImpl{
-		Client: &firebaseAuthImpl,
+		Client: firebaseAuth,
 	}
 	spaceRepository := repository.SpaceImpl{
 		SqlDriver: sqlDriver,

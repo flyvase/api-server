@@ -5,11 +5,11 @@ import (
 	"database/sql"
 )
 
-type rowImpl struct {
+type row struct {
 	Result *sql.Row
 }
 
-func (r *rowImpl) Scan(args ...interface{}) error {
+func (r *row) Scan(args ...interface{}) error {
 	err := r.Result.Scan(args...)
 	if err != nil {
 		if err == sql.ErrNoRows {
