@@ -6,14 +6,14 @@ import (
 )
 
 type space struct {
-	Id               uint32           `json:"id"`
-	Headline         string           `json:"headline"`
-	Access           string           `json:"access"`
-	NumberOfVisitors numberOfVisitors `json:"number_of_visitors"`
-	CustomerSegment  customerSegment  `json:"customer_segment"`
-	Price            price            `json:"price"`
-	Coordinate       geoPoint         `json:"coordinate"`
-	Images           []*spaceImage    `json:"images"`
+	Id               uint32            `json:"id"`
+	Headline         string            `json:"headline"`
+	Access           string            `json:"access,omitempty"`
+	NumberOfVisitors *numberOfVisitors `json:"number_of_visitors,omitempty"`
+	CustomerSegment  *customerSegment  `json:"customer_segment,omitempty"`
+	Price            price             `json:"price"`
+	Coordinate       geoPoint          `json:"coordinate"`
+	Images           []*spaceImage     `json:"images"`
 }
 
 func spaceFromModel(s *model.Space) *space {
@@ -26,16 +26,22 @@ func spaceFromModel(s *model.Space) *space {
 		images = []*spaceImage{}
 	}
 
+	numberOfVisitors := numberOfVisitorsFromValue(s.NumberOfVisitors)
+	if s.NumberOfVisitors.IsEmpty() {
+		numberOfVisitors = nil
+	}
+
+	customerSegment := customerSegmentFromValue(s.CustomerSegment)
+	if s.CustomerSegment.IsEmpty() {
+		customerSegment = nil
+	}
+
 	return &space{
-		Id:       uint32(s.Id.Value),
-		Headline: s.Headline,
-		Access:   s.Access,
-		NumberOfVisitors: numberOfVisitorsFromValue(
-			s.NumberOfVisitors,
-		),
-		CustomerSegment: customerSegmentFromValue(
-			s.CustomerSegment,
-		),
+		Id:               uint32(s.Id.Value),
+		Headline:         s.Headline,
+		Access:           s.Access,
+		NumberOfVisitors: numberOfVisitors,
+		CustomerSegment:  customerSegment,
 		Price: priceFromValue(
 			s.Price,
 		),

@@ -7,6 +7,7 @@ import (
 	"api-server/src/domain/value"
 	"api-server/src/infrastructure/entity"
 	"api-server/src/infrastructure/gateway/sql"
+	stdsql "database/sql"
 	"encoding/json"
 	"strconv"
 	"sync"
@@ -44,27 +45,44 @@ func (r *listResult) toSpaceModel() *model.Space {
 		imageModels = append(imageModels, i.ToSpaceImageModel())
 	}
 
+	var access string
+	if r.Access.Valid {
+		access = r.Access.String
+	}
+
+	var numberOfVisitors value.NumberOfVisitors
+	if r.WeeklyVisitors.Valid {
+		numberOfVisitors = value.NumberOfVisitors{
+			Visitors: uint(r.WeeklyVisitors.Int32),
+			Duration: constant.WeekDuration(),
+		}
+	}
+
 	c, err := strconv.Atoi(r.MainCustomersSex)
 	if err != nil {
 		panic(err)
 	}
 	sexCode := uint8(c)
 
+	var customerSegment value.CustomerSegment
+	if r.MinMainCustomersAge.Valid && r.MaxMainCustomersAge.Valid {
+		customerSegment = value.CustomerSegment{
+			Sex: value.Sex{
+				Code: sexCode,
+			},
+			MinAge: uint8(r.MinMainCustomersAge.Int32),
+			MaxAge: uint8(r.MaxMainCustomersAge.Int32),
+		}
+	}
+
 	return &model.Space{
 		Id: value.SpaceId{
 			Value: r.Id,
 		},
-		Headline: r.Headline,
-		Access:   r.Access,
-		NumberOfVisitors: value.NumberOfVisitors{
-			Visitors: uint(r.WeeklyVisitors),
-			Duration: constant.WeekDuration(),
-		},
-		CustomerSegment: value.CustomerSegment{
-			Sex:    value.NewSex(sexCode),
-			MinAge: r.MinMainCustomersAge,
-			MaxAge: r.MaxMainCustomersAge,
-		},
+		Headline:         r.Headline,
+		Access:           access,
+		NumberOfVisitors: numberOfVisitors,
+		CustomerSegment:  customerSegment,
 		Price: value.Price{
 			Price:    uint(r.DailyPrice),
 			Duration: constant.DayDuration(),
@@ -311,7 +329,7 @@ func (s *SpaceImpl) GetWebsiteUrl(id value.SpaceId) (string, error) {
 		where id = ?
 	`, id.Value)
 
-	var url string
+	var url stdsql.NullString
 	if err := row.Scan(
 		&url,
 	); err != nil {
@@ -322,5 +340,5 @@ func (s *SpaceImpl) GetWebsiteUrl(id value.SpaceId) (string, error) {
 		return "", err
 	}
 
-	return url, nil
+	return url.String, nil
 }
