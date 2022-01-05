@@ -1,12 +1,12 @@
 package repository
 
 import (
-	"api-server/src/application/entity"
 	"api-server/src/application/gateway/sql"
 	"api-server/src/core/constant"
 	"api-server/src/core/errors"
 	"api-server/src/domain/model"
 	"api-server/src/domain/value"
+	"api-server/src/infrastructure/entity"
 	"encoding/json"
 	"strconv"
 	"sync"
