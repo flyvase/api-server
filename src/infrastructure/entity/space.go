@@ -33,9 +33,9 @@ func (s *Space) ToSpaceModel(imageEntities []*SpaceImage, displayEntities []*Spa
 		displayModels = append(displayModels, d.toSpaceDisplayModel())
 	}
 
-	var convertedAccess string
+	var access string
 	if s.Access.Valid {
-		convertedAccess = s.Access.String
+		access = s.Access.String
 	}
 
 	var numberOfVisitors value.NumberOfVisitors
@@ -63,9 +63,9 @@ func (s *Space) ToSpaceModel(imageEntities []*SpaceImage, displayEntities []*Spa
 		}
 	}
 
-	var convertedWebsiteUrl string
+	var websiteUrl string
 	if s.WebsiteUrl.Valid {
-		convertedWebsiteUrl = s.WebsiteUrl.String
+		websiteUrl = s.WebsiteUrl.String
 	}
 
 	return &model.Space{
@@ -73,14 +73,14 @@ func (s *Space) ToSpaceModel(imageEntities []*SpaceImage, displayEntities []*Spa
 			Value: s.Id,
 		},
 		Headline:         s.Headline,
-		Access:           convertedAccess,
+		Access:           access,
 		NumberOfVisitors: numberOfVisitors,
 		CustomerSegment:  customerSegment,
 		Price: value.Price{
 			Price:    uint(s.DailyPrice),
 			Duration: constant.DayDuration(),
 		},
-		WebsiteUrl: convertedWebsiteUrl,
+		WebsiteUrl: websiteUrl,
 		Coordinate: value.GeoPoint{
 			Latitude:  s.Latitude,
 			Longitude: s.Longitude,

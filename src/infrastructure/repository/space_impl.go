@@ -44,9 +44,9 @@ func (r *listResult) toSpaceModel() *model.Space {
 		imageModels = append(imageModels, i.ToSpaceImageModel())
 	}
 
-	var convertedAccess string
+	var access string
 	if r.Access.Valid {
-		convertedAccess = r.Access.String
+		access = r.Access.String
 	}
 
 	var numberOfVisitors value.NumberOfVisitors
@@ -79,7 +79,7 @@ func (r *listResult) toSpaceModel() *model.Space {
 			Value: r.Id,
 		},
 		Headline:         r.Headline,
-		Access:           convertedAccess,
+		Access:           access,
 		NumberOfVisitors: numberOfVisitors,
 		CustomerSegment:  customerSegment,
 		Price: value.Price{
