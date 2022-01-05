@@ -7,6 +7,7 @@ import (
 	"api-server/src/domain/value"
 	"api-server/src/infrastructure/entity"
 	"api-server/src/infrastructure/gateway/sql"
+	stdsql "database/sql"
 	"encoding/json"
 	"strconv"
 	"sync"
@@ -328,7 +329,7 @@ func (s *SpaceImpl) GetWebsiteUrl(id value.SpaceId) (string, error) {
 		where id = ?
 	`, id.Value)
 
-	var url string
+	var url stdsql.NullString
 	if err := row.Scan(
 		&url,
 	); err != nil {
@@ -339,5 +340,5 @@ func (s *SpaceImpl) GetWebsiteUrl(id value.SpaceId) (string, error) {
 		return "", err
 	}
 
-	return url, nil
+	return url.String, nil
 }
