@@ -3,7 +3,7 @@ package value
 import "time"
 
 type NumberOfVisitors struct {
-	Visitors uint
+	Visitors uint32
 	Duration time.Duration
 }
 
