@@ -13,7 +13,7 @@ func (r *row) Scan(args ...interface{}) error {
 	err := r.Result.Scan(args...)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return errors.ErrSqlNoRows
+			return errors.ErrDataNotFound
 		}
 
 		return errors.Unexpected{
