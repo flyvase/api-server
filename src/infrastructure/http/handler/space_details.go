@@ -30,6 +30,11 @@ func SpaceDetailsGet(spaceRepository repository.Space) http.Handler {
 			},
 		)
 		if err != nil {
+			if err == errors.ErrSqlNoRows {
+				http.Error(rw, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+				return
+			}
+
 			switch err.(type) {
 			case *errors.Unexpected:
 				{
@@ -44,11 +49,6 @@ func SpaceDetailsGet(spaceRepository repository.Space) http.Handler {
 					return
 				}
 			}
-		}
-
-		if spaceModel == nil {
-			http.Error(rw, http.StatusText(http.StatusNotFound), http.StatusNotFound)
-			return
 		}
 
 		json, err := response.EncodeSpaceModel(spaceModel)

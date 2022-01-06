@@ -2,7 +2,6 @@ package repository
 
 import (
 	"api-server/src/core/constant"
-	"api-server/src/core/errors"
 	"api-server/src/domain/model"
 	"api-server/src/domain/value"
 	"api-server/src/infrastructure/entity"
@@ -288,10 +287,6 @@ func (s *SpaceImpl) getSpaceDisplays(id value.SpaceId, c chan *getSpaceDisplaysR
 func (s *SpaceImpl) Fetch(id value.SpaceId) (*model.Space, error) {
 	spaceEntity, err := s.getSpace(id)
 	if err != nil {
-		if err == errors.ErrSqlNoRows {
-			return nil, nil
-		}
-
 		return nil, err
 	}
 
@@ -333,10 +328,6 @@ func (s *SpaceImpl) GetWebsiteUrl(id value.SpaceId) (string, error) {
 	if err := row.Scan(
 		&url,
 	); err != nil {
-		if err == errors.ErrSqlNoRows {
-			return "", nil
-		}
-
 		return "", err
 	}
 

@@ -31,6 +31,11 @@ func SpaceOgpGet(spaceRepository repository.Space) http.Handler {
 			},
 		)
 		if err != nil {
+			if err == errors.ErrSqlNoRows {
+				http.Error(rw, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+				return
+			}
+
 			switch err.(type) {
 			case *errors.Unexpected:
 				{
@@ -45,11 +50,6 @@ func SpaceOgpGet(spaceRepository repository.Space) http.Handler {
 					return
 				}
 			}
-		}
-
-		if url == "" {
-			http.Error(rw, http.StatusText(http.StatusNotFound), http.StatusNotFound)
-			return
 		}
 
 		resp, err := http.Get(url)
