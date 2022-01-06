@@ -41,7 +41,7 @@ func (s *Space) ToSpaceModel(imageEntities []*SpaceImage, displayEntities []*Spa
 	var numberOfVisitors value.NumberOfVisitors
 	if s.WeeklyVisitors.Valid {
 		numberOfVisitors = value.NumberOfVisitors{
-			Visitors: uint(s.WeeklyVisitors.Int32),
+			Visitors: uint32(s.WeeklyVisitors.Int32),
 			Duration: constant.WeekDuration(),
 		}
 	}
@@ -77,7 +77,7 @@ func (s *Space) ToSpaceModel(imageEntities []*SpaceImage, displayEntities []*Spa
 		NumberOfVisitors: numberOfVisitors,
 		CustomerSegment:  customerSegment,
 		Price: value.Price{
-			Price:    uint(s.DailyPrice),
+			Price:    s.DailyPrice,
 			Duration: constant.DayDuration(),
 		},
 		WebsiteUrl: websiteUrl,

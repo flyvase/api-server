@@ -3,8 +3,8 @@ package response
 import "api-server/src/domain/value"
 
 type price struct {
-	Price    uint  `json:"price"`
-	Duration int64 `json:"duration"`
+	Price    uint32 `json:"price"`
+	Duration int64  `json:"duration"`
 }
 
 func priceFromValue(p value.Price) price {

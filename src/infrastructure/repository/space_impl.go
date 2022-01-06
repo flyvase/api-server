@@ -53,7 +53,7 @@ func (r *listResult) toSpaceModel() *model.Space {
 	var numberOfVisitors value.NumberOfVisitors
 	if r.WeeklyVisitors.Valid {
 		numberOfVisitors = value.NumberOfVisitors{
-			Visitors: uint(r.WeeklyVisitors.Int32),
+			Visitors: uint32(r.WeeklyVisitors.Int32),
 			Duration: constant.WeekDuration(),
 		}
 	}
@@ -84,7 +84,7 @@ func (r *listResult) toSpaceModel() *model.Space {
 		NumberOfVisitors: numberOfVisitors,
 		CustomerSegment:  customerSegment,
 		Price: value.Price{
-			Price:    uint(r.DailyPrice),
+			Price:    r.DailyPrice,
 			Duration: constant.DayDuration(),
 		},
 		Coordinate: value.GeoPoint{
