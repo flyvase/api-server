@@ -31,7 +31,7 @@ func (d *Driver) Exec(query string, args ...interface{}) error {
 	_, err := d.Db.Exec(query, args...)
 	if err != nil {
 		if err == sql.ErrConnDone {
-			return errors.ErrSqlConnClosed
+			return errors.ErrDatasourceConnClosed
 		}
 
 		return errors.Unexpected{
@@ -46,7 +46,7 @@ func (d *Driver) Query(query string, args ...interface{}) (*rows, error) {
 	r, err := d.Db.Query(query, args...)
 	if err != nil {
 		if err == sql.ErrConnDone {
-			return nil, errors.ErrSqlConnClosed
+			return nil, errors.ErrDatasourceConnClosed
 		}
 
 		return nil, errors.Unexpected{

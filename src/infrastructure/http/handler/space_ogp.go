@@ -31,7 +31,7 @@ func SpaceOgpGet(spaceRepository repository.Space) http.Handler {
 			},
 		)
 		if err != nil {
-			if err == errors.ErrSqlNoRows {
+			if err == errors.ErrDataNotFound {
 				http.Error(rw, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 				return
 			}
